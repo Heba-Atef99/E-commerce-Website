@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models
 {
-    public class Item
+    public class ITEM
     {
         [Key]
         public int Id { get; set; }
@@ -17,11 +17,11 @@ namespace E_commerce.Models
         public int Price { get; set; }
         public string Img { get; set; }
         public DateTime Date { get; set; }
-        public int Original_count { get; set; }
-        public int Available_count { get; set; }
-        public int? Owner_account_id { get; set; }
-        [ForeignKey("Owner_account_id")]
-        public virtual Account Account { get; set; }
+        public int Original_Count { get; set; }
+        public int Available_Count { get; set; }
+        public int? Owner_Account_Id { get; set; }
+        [ForeignKey("Owner_Account_Id")]
+        public virtual ACCOUNT ACCOUNT { get; set; }
 
     }
 }

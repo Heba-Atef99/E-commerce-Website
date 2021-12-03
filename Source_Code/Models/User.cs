@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models
 {
-    public class User
+    public class USER
     {
         [Key]
         public int Id { get; set; }
