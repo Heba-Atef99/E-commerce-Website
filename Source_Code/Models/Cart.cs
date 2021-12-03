@@ -7,17 +7,20 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models
 {
-    public class PROMOTED_ITEM
+    public class CART
     {
         [Key]
         public int Id { get; set; }
         public int? Item_Id { get; set; }
-        [ForeignKey("Item_Id")]
+        [ForeignKey ("Item_Id")]
         public virtual ITEM ITEM { get; set; }
-
-        public int? Promoted_Account_Id { get; set; }
-        [ForeignKey("Promoted_Account_Id")]
+        public int? _Account_Id { get; set; }
+        [ForeignKey("Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
+        public int Item_count { get; set; }
+
+
+
 
     }
 }
