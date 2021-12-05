@@ -12,7 +12,9 @@ namespace E_commerce.Models
         [Key]
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Type { get; set; }
+        public int? Type { get; set; }
+        [ForeignKey("Type")]
+        public virtual TYPE TYPE { get; set; }
         public string Description { get; set; }
         public int Price { get; set; }
         public string Img { get; set; }
