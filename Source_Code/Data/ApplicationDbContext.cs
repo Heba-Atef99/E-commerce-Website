@@ -48,8 +48,6 @@ namespace E_commerce.Data
         public DbSet<PURCHASED_ITEM> PURCHASED_ITEM { get; set; }
         public DbSet<TRANSACTION_HISTORY> TRANSACTION_HISTORY { get; set; }
 
-        //public DbSet<Participants2> Participants2 { get; set; }
-
     }
 
 }
