@@ -1,0 +1,27 @@
+﻿@model IEnumerable<ITEM>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<div class="row mt-5">
+    @foreach (var item in Model)
+    {
+        <div class="card col-md-3 mx-2 mb-3 p-0">
+            <div class="card-body">
+                <h4 class="card-title text-danger">@item.Name </h4>
+                <div class="card-text">
+                    <a class="btn btn-info from-control text-white">share</a>
+                    <h6>Type: @item.Type</h6>
+                    <h6>price: @item.Price</h6>
+                    <h6>Discription: @item.Description</h6>
+                    <a class="btn btn-info from-control text-white">add to cart</a>
+                </div>
+                <img width="70" height="70" src="~@item.Image" alt="img" />
+            </div>
+        </div>
+    }
+
+
+
+    </div>
