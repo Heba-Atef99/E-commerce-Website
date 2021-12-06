@@ -7,6 +7,7 @@ namespace E_commerce.Models.Repositories
 {
     public interface IItemRepository
     {
+        public ITEM GetItemById(int itemId);
         IEnumerable<ITEM> GetAllItems(); 
         IEnumerable<ITEM> GetItemsByAccId(int id); 
         Boolean UpdateItem(ITEM itemChanges);

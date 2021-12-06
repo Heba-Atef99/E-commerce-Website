@@ -117,10 +117,6 @@ namespace E_commerce.Models.Repositories
         public Boolean RemoveAllItems(int accId)
         {
             List<ITEM> i = _sadb.ITEM.Where(i => i.Owner_Account_Id == accId).ToList();
-            //foreach(ITEM item in i)
-            //{
-            //    _sadb.ITEM.Remove(item);
-            //}
             if(i.Any())
             {
                 _sadb.ITEM.RemoveRange(i);
@@ -129,10 +125,6 @@ namespace E_commerce.Models.Repositories
             }
 
             i = _apdb.ITEM.Where(i => i.Owner_Account_Id == accId).ToList();
-            //foreach (ITEM item in i)
-            //{
-            //    _apdb.ITEM.Remove(item);
-            //}
             if (i.Any())
             {
                 _apdb.ITEM.RemoveRange(i);
