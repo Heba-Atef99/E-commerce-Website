@@ -36,6 +36,23 @@ namespace E_commerce.Models.Repositories
             return items;
         }
 
+        public ITEM GetItemById(int itemId)
+        {
+            ITEM item;
+
+            if (itemId % 2 == 0)
+            {
+                item = _sadb.ITEM.Where(i => i.Id == itemId).Single();
+            }
+            else
+            {
+                item = _apdb.ITEM.Where(i => i.Id == itemId).Single();
+            }
+
+            return item;
+        }
+
+
         //Update
         public Boolean UpdateItem(ITEM itemChanges)
         {
