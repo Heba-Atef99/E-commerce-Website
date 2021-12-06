@@ -10,11 +10,11 @@ using E_commerce.Models;
 
 namespace E_commerce.Controllers
 {
-    public class DashboardController : Controller
+    public class ItemController : Controller
     {
         private readonly IItemRepository _itemRepo;
 
-        public DashboardController(IItemRepository itemRepository)
+        public ItemController(IItemRepository itemRepository)
         {
             _itemRepo = itemRepository;
         }
@@ -45,7 +45,8 @@ namespace E_commerce.Controllers
             }
             ITEM tt = new ITEM {Id = 3, Name = "Batata", Type = 3, Owner_Account_Id = 1, Available_Count=5, 
                 Description = "Sweet Batata", Original_Count= 10, Price = 50, Date = DateTime.Now, Image="lnlnl"};
-            //_itemRepo.AddItem(tt);
+            _itemRepo.AddItem(tt);
+
             //_itemRepo.UpdateItemType(tt, 2);
             //Boolean check = _itemRepo.DeleteItem(2, 2);
             IEnumerable<ITEM> t = _itemRepo.GetAllItems();
