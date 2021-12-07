@@ -48,6 +48,7 @@ namespace E_commerce
             services.AddScoped<IUserRepository, SQLUserRepository>();
             services.AddScoped<IAccountRepository, SQLAccountRepository>();
             services.AddScoped<IPromotedItemRepository, SQLPromotedItemRepository>();
+            services.AddScoped<IPurchasedItemRepository, SQLPurchasedItemRepository>();
 
             services.AddControllersWithViews();
         }
