@@ -7,7 +7,7 @@ namespace E_commerce.Models.Repositories
 {
     public interface IUserRepository
     {
-        public void AddUser(USER u);
+        public int AddUser(USER u);
         public IEnumerable<USER> GetAllUsers();
         public USER GetUserById(int userId);
         public Boolean UpdateUser(USER updatedUser);

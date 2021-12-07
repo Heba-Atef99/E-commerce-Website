@@ -18,7 +18,7 @@ namespace E_commerce.Models.Repositories
         }
 
         //Create
-        public void AddAccount(ACCOUNT a)
+        public int AddAccount(ACCOUNT a)
         {
             int maxId = _apdb.ACCOUNT.Select(a => a.Id).DefaultIfEmpty().Max();
             //email & Pass on sadb
@@ -29,6 +29,7 @@ namespace E_commerce.Models.Repositories
 
             _sadb.SaveChanges();
             _apdb.SaveChanges();
+            return maxId;
         }
 
         //Read

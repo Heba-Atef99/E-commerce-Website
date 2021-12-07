@@ -18,7 +18,7 @@ namespace E_commerce.Models.Repositories
         }
 
         //Creat
-        public void AddUser(USER u)
+        public int AddUser(USER u)
         {
             int maxId = 0;
             if(u.Name[0] <= 'M')
@@ -36,6 +36,8 @@ namespace E_commerce.Models.Repositories
                 _apdb.USER.Add(u);
                 _apdb.SaveChanges();
             }
+
+            return maxId;
         }
 
         //Read

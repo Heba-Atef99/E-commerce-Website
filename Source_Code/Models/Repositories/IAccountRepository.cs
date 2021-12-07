@@ -7,7 +7,7 @@ namespace E_commerce.Models.Repositories
 {
     public interface IAccountRepository
     {
-        public void AddAccount(ACCOUNT a);
+        public int AddAccount(ACCOUNT a);
         public IEnumerable<ACCOUNT1> GetAllAccountEmailsAndPass();
         public ACCOUNT GetAccountByAccId(int accId);
         public ACCOUNT GetAccountByUserId(int userId);
