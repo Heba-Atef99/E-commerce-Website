@@ -66,13 +66,15 @@ namespace E_commerce.Models.Repositories
             return u;
         }
 
-        public USER GetUserByPhone(int phone)
+        public USER GetUserByPhone(string name, int phone)
         {
             USER u;
+            if (name[0] <= 'M')
+            {
 
-            u = _sadb.USER.Where(i => i.Phone == phone).Single();
-   
-            if(u == null)
+                u = _sadb.USER.Where(i => i.Phone == phone).Single();
+            }
+            else
             {
                 u = _apdb.USER.Where(i => i.Phone == phone).Single();
             }

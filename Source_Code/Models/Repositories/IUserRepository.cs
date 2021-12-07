@@ -10,6 +10,7 @@ namespace E_commerce.Models.Repositories
         public int AddUser(USER u);
         public IEnumerable<USER> GetAllUsers();
         public USER GetUserById(int userId);
+        public USER GetUserByPhone(string name,int phone);
         public Boolean UpdateUser(USER updatedUser);
         public Boolean UpdateUserName(int oldId, USER newUser);
         public Boolean DeleteUser(int userId);
