@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using E_commerce.Models.Repositories;
 using E_commerce.Models;
+using E_commerce.ViewModels.ItemVM;
 
 namespace E_commerce.Controllers
 {
@@ -54,5 +55,75 @@ namespace E_commerce.Controllers
 
             return View(t);
         }
+        public IActionResult Inventory()
+        {
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            return View(t);
+            //return View();
+        }
+        public IActionResult Add()
+        {
+            ITEM t= new ITEM();
+            return View(t);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Add(AddItemVM obj)
+        {
+            ITEM entity=new ITEM();
+
+            entity.Name = obj.Name;
+            entity.Type = obj.Type;
+            entity.Original_Count = obj.Original_Count;
+            entity.Description = obj.Description;
+            entity.Price = obj.Price;
+            entity.Date = DateTime.Now;
+            entity.Image = obj.Image;
+            entity.Owner_Account_Id = 1;
+
+            _itemRepo.AddItem(entity);
+            return Redirect("/Item/Inventory");
+            //return View();
+        }
+
+
+        public IActionResult Which_Item_Edit()
+        {
+            return View();
+        }
+        public IActionResult Edit()
+        {
+            ITEM t = _itemRepo.GetItemById(1);
+            //ViewBag.Item = t;
+            return View(t);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit(EditItemVM obj)
+        {
+            ITEM entity= _itemRepo.GetItemById(1);
+            entity.Id = 1;
+            entity.Name = obj.Name;
+            entity.Type= obj.Type;
+            entity.Original_Count= obj.Original_Count;
+            entity.Available_Count = obj.Available_Count;
+            entity.Description= obj.Description;
+            entity.Price= obj.Price;
+            entity.Date= obj.Date;
+            entity.Image= obj.Image;
+            entity.Owner_Account_Id= 1;
+            Boolean x= _itemRepo.UpdateItem(entity);
+            //Boolean y=_itemRepo.UpdateItemType(entity, obj.Type);
+
+            return Redirect("/Item/Inventory");
+
+            //return View();
+        }
+
+        public IActionResult Delete()
+        {
+            return View();
+        }
+
     }
 }
