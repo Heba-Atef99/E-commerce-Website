@@ -22,8 +22,8 @@ namespace E_commerce.Models.Repositories
         {
             int maxId = _apdb.ACCOUNT.Select(a => a.Id).DefaultIfEmpty().Max();
             //email & Pass on sadb
-            ACCOUNT a1 = new ACCOUNT { Id = maxId + 1, Email = a.Email, Pass = a.Pass };
-            ACCOUNT a2 = new ACCOUNT { Id = maxId + 1, User_Id = a.User_Id, Balance = a.Balance };
+            ACCOUNT1 a1 = new ACCOUNT1 { Id = maxId + 1, Email = a.Email, Pass = a.Pass };
+            ACCOUNT2 a2 = new ACCOUNT2 { Id = maxId + 1, User_Id = a.User_Id, Balance = a.Balance };
             _sadb.ACCOUNT.Add(a1);
             _apdb.ACCOUNT.Add(a2);
 
@@ -34,43 +34,42 @@ namespace E_commerce.Models.Repositories
         //Read
         public ACCOUNT GetAccountByAccId(int accId)
         {
-            ACCOUNT acc = _sadb.ACCOUNT.Where(a => a.Id == accId).Single();
-            ACCOUNT acc2 = _apdb.ACCOUNT.Where(a => a.Id == accId).Single();
-            acc.User_Id = acc2.User_Id;
-            acc.Balance = acc2.Balance;
+            ACCOUNT1 acc1 = _sadb.ACCOUNT.Where(a => a.Id == accId).Single();
+            ACCOUNT2 acc2 = _apdb.ACCOUNT.Where(a => a.Id == accId).Single();
 
+            ACCOUNT acc = new ACCOUNT { Id = accId, Email = acc1.Email, Pass = acc1.Pass, Balance = acc2.Balance, User_Id = acc2.User_Id};
             return acc;
         }
 
         public ACCOUNT GetAccountByUserId(int userId)
         {
-            ACCOUNT acc2 = _apdb.ACCOUNT.Where(a => a.User_Id == userId).Single();
-            ACCOUNT acc = _sadb.ACCOUNT.Where(a => a.Id == acc2.Id).Single();
-            acc.User_Id = acc2.User_Id;
-            acc.Balance = acc2.Balance;
-
+            ACCOUNT2 acc2 = _apdb.ACCOUNT.Where(a => a.User_Id == userId).Single();
+            ACCOUNT1 acc1 = _sadb.ACCOUNT.Where(a => a.Id == acc2.Id).Single();
+            ACCOUNT acc = new ACCOUNT { Id = acc2.Id, Email = acc1.Email, Pass = acc1.Pass, Balance = acc2.Balance, User_Id = acc2.User_Id };
             return acc;
         }
 
-        public IEnumerable<ACCOUNT> GetAllAccountEmailsAndPass()
+        public IEnumerable<ACCOUNT1> GetAllAccountEmailsAndPass()
         {
 
-            IEnumerable<ACCOUNT> accounts = _sadb.ACCOUNT;
+            IEnumerable<ACCOUNT1> accounts = _sadb.ACCOUNT.ToList();
             return accounts;
         }
-
+        
         //Update
         public Boolean UpdateAccount(ACCOUNT updatedAcc, int isEmailorPassUpdated)
         {
-            ACCOUNT exist;
+            ACCOUNT1 exist1;
+            ACCOUNT2 exist2;
 
             if (isEmailorPassUpdated == 1)
             {
-                exist = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
-                if (exist != null)
+                exist1 = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
+                if (exist1 != null)
                 {
+                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass}
 
-                    var modified = _sadb.ACCOUNT.Attach(updatedAcc);
+                    var modified = _sadb.ACCOUNT.Attach(acc1);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _sadb.SaveChanges();
                     return true;
@@ -78,11 +77,11 @@ namespace E_commerce.Models.Repositories
             }
             else if (isEmailorPassUpdated == 0)
             {
-                exist = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
-                if (exist != null)
+                exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
+                if (exist2 != null)
                 {
-
-                    var modified = _apdb.ACCOUNT.Attach(updatedAcc);
+                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id }
+                    var modified = _apdb.ACCOUNT.Attach(acc2);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
                     return true;
@@ -90,16 +89,18 @@ namespace E_commerce.Models.Repositories
             }
             else
             {
-                exist = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
-                ACCOUNT exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
-                if (exist != null && exist2 != null)
+                exist1 = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
+                exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
+                if (exist1 != null && exist2 != null)
                 {
+                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass }
+                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id }
 
-                    var modified1 = _sadb.ACCOUNT.Attach(updatedAcc);
+                    var modified1 = _sadb.ACCOUNT.Attach(acc1);
                     modified1.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _sadb.SaveChanges();
 
-                    var modified2 = _apdb.ACCOUNT.Attach(updatedAcc);
+                    var modified2 = _apdb.ACCOUNT.Attach(acc2);
                     modified2.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
                     return true;
@@ -111,12 +112,12 @@ namespace E_commerce.Models.Repositories
         //Delete
         public Boolean DeleteAccountByUserId(int userId)
         {
-            ACCOUNT a = _apdb.ACCOUNT.Where(i => i.User_Id == userId).FirstOrDefault();
-            ACCOUNT a2 = _sadb.ACCOUNT.Where(i => i.Id == a.Id).FirstOrDefault();
-            if (a != null && a2 != null)
+            ACCOUNT2 a2 = _apdb.ACCOUNT.Where(i => i.User_Id == userId).FirstOrDefault();
+            ACCOUNT1 a1 = _sadb.ACCOUNT.Where(i => i.Id == a2.Id).FirstOrDefault();
+            if (a1 != null && a2 != null)
             {
-                _sadb.ACCOUNT.Remove(a2);
-                _apdb.ACCOUNT.Remove(a);
+                _sadb.ACCOUNT.Remove(a1);
+                _apdb.ACCOUNT.Remove(a2);
                 _sadb.SaveChanges();
                 _apdb.SaveChanges();
                 return true;
@@ -126,12 +127,12 @@ namespace E_commerce.Models.Repositories
 
         public Boolean DeleteAccountById(int accId)
         {
-            ACCOUNT a = _apdb.ACCOUNT.Where(i => i.Id == accId).FirstOrDefault();
-            ACCOUNT a2 = _sadb.ACCOUNT.Where(i => i.Id == accId).FirstOrDefault();
-            if (a != null && a2 != null)
+            ACCOUNT2 a2 = _apdb.ACCOUNT.Where(i => i.Id == accId).FirstOrDefault();
+            ACCOUNT1 a1 = _sadb.ACCOUNT.Where(i => i.Id == accId).FirstOrDefault();
+            if (a1 != null && a2 != null)
             {
-                _sadb.ACCOUNT.Remove(a2);
-                _apdb.ACCOUNT.Remove(a);
+                _sadb.ACCOUNT.Remove(a1);
+                _apdb.ACCOUNT.Remove(a2);
                 _sadb.SaveChanges();
                 _apdb.SaveChanges();
                 return true;
