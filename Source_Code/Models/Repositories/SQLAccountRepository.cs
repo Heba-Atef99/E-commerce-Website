@@ -67,7 +67,7 @@ namespace E_commerce.Models.Repositories
                 exist1 = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null)
                 {
-                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass}
+                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
 
                     var modified = _sadb.ACCOUNT.Attach(acc1);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
@@ -80,7 +80,7 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist2 != null)
                 {
-                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id }
+                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
                     var modified = _apdb.ACCOUNT.Attach(acc2);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
@@ -93,8 +93,8 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null && exist2 != null)
                 {
-                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass }
-                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id }
+                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
+                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
 
                     var modified1 = _sadb.ACCOUNT.Attach(acc1);
                     modified1.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
