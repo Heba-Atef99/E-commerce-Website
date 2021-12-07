@@ -11,7 +11,7 @@ namespace E_commerce.Models.Repositories
         public IEnumerable<PROMOTED_ITEM> GetAllPromotedItems();
         public IEnumerable<PROMOTED_ITEM> GetPromotedItemsByAccId(int accId);
         public PROMOTED_ITEM GetPromotedItemById(int promotedItemId);
-        public Boolean UpdateItem(PROMOTED_ITEM updatedPromotedItem);
+        public Boolean UpdatePromotedItem(PROMOTED_ITEM updatedPromotedItem);
         public Boolean UpdatePromotedItem_ItemId(PROMOTED_ITEM oldItem, int newItemId);
         public Boolean UpdatePromotedItem_ItemId(int oldItemId, int oldAccId, PROMOTED_ITEM newPromotedItem);
         public Boolean DeletePromotedItem(int itemId, int accId);

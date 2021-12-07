@@ -74,7 +74,7 @@ namespace E_commerce.Models.Repositories
         }
 
         //Update
-        public Boolean UpdateItem(PROMOTED_ITEM updatedPromotedItem)
+        public Boolean UpdatePromotedItem(PROMOTED_ITEM updatedPromotedItem)
         {
             PROMOTED_ITEM exist;
             if (updatedPromotedItem.Item_Id % 2 == 0)
