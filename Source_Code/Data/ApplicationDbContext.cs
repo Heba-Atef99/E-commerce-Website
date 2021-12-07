@@ -31,7 +31,7 @@ namespace E_commerce.Data
         public DbSet<USER> USER { get; set; }
         public DbSet<PROMOTED_ITEM> PROMOTED_ITEM { get; set; }
         public DbSet<PURCHASED_ITEM> PURCHASED_ITEM { get; set; }
-        public DbSet<TRANSACTION_HISTORY> TRANSACTION_HISTORY { get; set; }
+        public DbSet<TRANSACTION2> TRANSACTION_HISTORY { get; set; }
 
     }
     public class SADbContext : DbContext
@@ -46,7 +46,7 @@ namespace E_commerce.Data
         public DbSet<USER> USER { get; set; }
         public DbSet<PROMOTED_ITEM> PROMOTED_ITEM { get; set; }
         public DbSet<PURCHASED_ITEM> PURCHASED_ITEM { get; set; }
-        public DbSet<TRANSACTION_HISTORY> TRANSACTION_HISTORY { get; set; }
+        public DbSet<TRANSACTION1> TRANSACTION_HISTORY { get; set; }
 
     }
 
