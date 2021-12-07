@@ -44,9 +44,9 @@ namespace E_commerce
                 options.IdleTimeout = TimeSpan.FromMinutes(240);//You can set Time (4hrs)   
             });
 
-            //services.AddTransient<IParticipantsRepository, MockParticipantsRepositoy>();
-            services.AddScoped<IParticipantsRepository, MockParticipantsRepositoy>();
             services.AddScoped<IItemRepository, SQLItemRepository>();
+            services.AddScoped<IUserRepository, SQLUserRepository>();
+            services.AddScoped<IAccountRepository, SQLAccountRepository>();
 
             services.AddControllersWithViews();
         }
