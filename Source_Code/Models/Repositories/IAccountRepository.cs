@@ -8,6 +8,7 @@ namespace E_commerce.Models.Repositories
     public interface IAccountRepository
     {
         public void AddAccount(ACCOUNT a);
+        public IEnumerable<ACCOUNT> GetAllAccountEmailsAndPass();
         public ACCOUNT GetAccountByAccId(int accId);
         public ACCOUNT GetAccountByUserId(int userId);
         public Boolean UpdateAccount(ACCOUNT updatedAcc, int isEmailorPassUpdated);

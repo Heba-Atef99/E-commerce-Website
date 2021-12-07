@@ -52,6 +52,13 @@ namespace E_commerce.Models.Repositories
             return acc;
         }
 
+        public IEnumerable<ACCOUNT> GetAllAccountEmailsAndPass()
+        {
+
+            IEnumerable<ACCOUNT> accounts = _sadb.ACCOUNT;
+            return accounts;
+        }
+
         //Update
         public Boolean UpdateAccount(ACCOUNT updatedAcc, int isEmailorPassUpdated)
         {
