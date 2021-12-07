@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models.Repositories
 {
-    public class SQLUserRepository : IUserRepositorycs
+    public class SQLUserRepository : IUserRepository
     {
         private readonly APDbContext _apdb;
         private readonly SADbContext _sadb;
