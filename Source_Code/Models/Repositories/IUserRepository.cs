@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models.Repositories
 {
-    public interface IUserRepositorycs
+    public interface IUserRepository
     {
         public void AddUser(USER u);
         public IEnumerable<USER> GetAllUsers();
