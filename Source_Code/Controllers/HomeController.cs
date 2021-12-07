@@ -74,5 +74,48 @@ namespace E_commerce.Controllers
             IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
             return View(a);
         }
+        ///login
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Login(Signup objc)
+        {
+            ACCOUNT ac = new ACCOUNT
+            {
+                Email = objc.Email,
+                Pass = objc.Password,
+            };
+            IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
+            foreach (var acc in a)
+            {
+                if (acc.Email == objc.Email)
+                {
+                    if(acc.Pass==objc.Password)
+                    {
+                        return Redirect("/Home/welcome");
+                    }
+                    else 
+                    {
+                        ViewBag.PasswordError = "wrong password";
+                        return View();
+                    }
+                   
+                }
+                else 
+                {
+                    ViewBag.EmailExistError = "You need to signed up first";
+                }
+
+            }
+            return View();
+        }
+        public IActionResult welcome()
+        {
+            return View();
+        }
     }
 }
