@@ -10,11 +10,11 @@ namespace E_commerce.Models.Repositories
         public ITEM GetItemById(int itemId);
         IEnumerable<ITEM> GetAllItems(); 
         IEnumerable<ITEM> GetItemsByAccId(int id); 
-        Boolean UpdateItem(ITEM itemChanges);
-        Boolean UpdateItemType(ITEM item, int newType);
-        Boolean UpdateItemType(ITEM oldItem, ITEM newItem, int newType);
+        Boolean UpdateItem(ITEM updatedItem);
+        Boolean UpdateItemType(ITEM oldItem, int newType);
+        Boolean UpdateItemType(int oldType, int oldOwnerAccId, ITEM newItem);
         Boolean DeleteItem(int typeId, int accId); 
-        Boolean RemoveAllItems(int accId);
+        Boolean DeleteAllItems(int accId);
         void AddItem(ITEM i); 
 
     }

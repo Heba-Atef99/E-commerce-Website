@@ -16,6 +16,27 @@ namespace E_commerce.Models.Repositories
             _apdb = db1;
             _sadb = db2;
         }
+        //Create
+        public void AddItem(ITEM i)
+        {
+            int maxId = 0;
+            if (i.Type % 2 == 0)
+            {
+                maxId = _sadb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
+                i.Id = (maxId > 0) ? maxId + 2 : 2;
+                _sadb.ITEM.Add(i);
+                _sadb.SaveChanges();
+            }
+            else
+            {
+                maxId = _apdb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
+                i.Id = (maxId > 0) ? maxId + 2 : 1;
+
+                _apdb.ITEM.Add(i);
+                _apdb.SaveChanges();
+
+            }
+        }
 
         //Read
         public IEnumerable<ITEM> GetAllItems()
@@ -54,15 +75,15 @@ namespace E_commerce.Models.Repositories
 
 
         //Update
-        public Boolean UpdateItem(ITEM itemChanges)
+        public Boolean UpdateItem(ITEM updatedItem)
         {
             ITEM exist;
-            if (itemChanges.Type % 2 == 0)
+            if (updatedItem.Type % 2 == 0)
             {
-                exist = _sadb.ITEM.Where(i => i.Id == itemChanges.Id).FirstOrDefault();
+                exist = _sadb.ITEM.Where(i => i.Id == updatedItem.Id).FirstOrDefault();
                 if(exist != null)
                 {
-                    var modified = _sadb.ITEM.Attach(itemChanges);
+                    var modified = _sadb.ITEM.Attach(updatedItem);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _sadb.SaveChanges();
                     return true;
@@ -70,10 +91,10 @@ namespace E_commerce.Models.Repositories
             }
             else
             {
-                exist = _apdb.ITEM.Where(i => i.Id == itemChanges.Id).FirstOrDefault();
+                exist = _apdb.ITEM.Where(i => i.Id == updatedItem.Id).FirstOrDefault();
                 if (exist != null)
                 {
-                    var modified = _apdb.ITEM.Attach(itemChanges);
+                    var modified = _apdb.ITEM.Attach(updatedItem);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
                     return true;
@@ -82,21 +103,24 @@ namespace E_commerce.Models.Repositories
             return false;
         }
 
-        public Boolean UpdateItemType(ITEM item, int newType)
+        //in case you need to update the name only, send the old item without any modifications
+        public Boolean UpdateItemType(ITEM oldItem, int newType)
         {
-            Boolean check = DeleteItem(item.Type, item.Owner_Account_Id);
+            Boolean check = DeleteItem(oldItem.Type, oldItem.Owner_Account_Id);
             if(check)
             {
-                item.Type = newType;
-                AddItem(item);
+                oldItem.Type = newType;
+                AddItem(oldItem);
                 return true;
             }
             return false;
         }
 
-        public Boolean UpdateItemType(ITEM oldItem, ITEM newItem, int newType)
+        //in case you have other modifications other than the name then send the old item
+        //without any modifications and the new item with all the modifications
+        public Boolean UpdateItemType(int oldType, int oldOwnerAccId, ITEM newItem)
         {
-            Boolean check = DeleteItem(oldItem.Type, oldItem.Owner_Account_Id);
+            Boolean check = DeleteItem(oldType, oldOwnerAccId);
             if (check)
             {
                 AddItem(newItem);
@@ -131,7 +155,7 @@ namespace E_commerce.Models.Repositories
             return false;
         }
 
-        public Boolean RemoveAllItems(int accId)
+        public Boolean DeleteAllItems(int accId)
         {
             List<ITEM> i = _sadb.ITEM.Where(i => i.Owner_Account_Id == accId).ToList();
             if(i.Any())
@@ -151,27 +175,6 @@ namespace E_commerce.Models.Repositories
             return false;
         }
 
-        //Create
-        public void AddItem(ITEM i)
-        {
-            int maxId = 0;
-            if (i.Type % 2 == 0)
-            {
-                maxId = _sadb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
-                i.Id = (maxId > 0)? maxId + 2 : 2;
-                _sadb.ITEM.Add(i);
-                _sadb.SaveChanges();
-            }
-            else
-            {
-                maxId = _apdb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
-                i.Id = (maxId > 0) ? maxId + 2 : 1;
-
-                _apdb.ITEM.Add(i);
-                _apdb.SaveChanges();
-
-            }
-        }
 
     }
 }
