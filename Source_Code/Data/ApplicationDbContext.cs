@@ -24,14 +24,15 @@ namespace E_commerce.Data
         {
 
         }
-        public DbSet<Participants> Participants { get; set; }
         public DbSet<ITEM> ITEM { get; set; }
+        public DbSet<TYPE> TYPE { get; set; }
         public DbSet<ACCOUNT2> ACCOUNT { get; set; }
         public DbSet<CART> CART { get; set; }
         public DbSet<USER> USER { get; set; }
         public DbSet<PROMOTED_ITEM> PROMOTED_ITEM { get; set; }
         public DbSet<PURCHASED_ITEM> PURCHASED_ITEM { get; set; }
         public DbSet<TRANSACTION2> TRANSACTION_HISTORY { get; set; }
+
 
     }
     public class SADbContext : DbContext
@@ -41,6 +42,7 @@ namespace E_commerce.Data
 
         }
         public DbSet<ITEM> ITEM { get; set; }
+        public DbSet<TYPE> TYPE { get; set; }
         public DbSet<ACCOUNT1> ACCOUNT { get; set; }
         public DbSet<CART> CART { get; set; }
         public DbSet<USER> USER { get; set; }
