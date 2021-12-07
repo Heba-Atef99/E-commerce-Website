@@ -56,7 +56,14 @@ namespace E_commerce.Models.Repositories
             IEnumerable<ACCOUNT1> accounts = _sadb.ACCOUNT.ToList();
             return accounts;
         }
-        
+
+        public ACCOUNT GetAccountByEmail(string email)
+        {
+            ACCOUNT1 acc1 = _sadb.ACCOUNT.Where(a => a.Email == email).Single();
+            ACCOUNT2 acc2 = _apdb.ACCOUNT.Where(a => a.Id == acc1.Id).Single();
+            ACCOUNT acc = new ACCOUNT { Id = acc2.Id, Email = acc1.Email, Pass = acc1.Pass, Balance = acc2.Balance, User_Id = acc2.User_Id };
+            return acc;
+        }
         //Update
         public Boolean UpdateAccount(ACCOUNT updatedAcc, int isEmailorPassUpdated)
         {
