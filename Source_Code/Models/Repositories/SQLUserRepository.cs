@@ -66,6 +66,19 @@ namespace E_commerce.Models.Repositories
             return u;
         }
 
+        public USER GetUserByPhone(int phone)
+        {
+            USER u;
+
+            u = _sadb.USER.Where(i => i.Phone == phone).Single();
+   
+            if(u == null)
+            {
+                u = _apdb.USER.Where(i => i.Phone == phone).Single();
+            }
+
+            return u;
+        }
         //Update
         public Boolean UpdateUser(USER updatedUser)
         {
