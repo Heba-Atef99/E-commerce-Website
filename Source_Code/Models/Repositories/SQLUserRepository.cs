@@ -20,24 +20,27 @@ namespace E_commerce.Models.Repositories
         //Creat
         public int AddUser(USER u)
         {
-            int maxId = 0;
+            List<int> maxId;
             if(u.Name[0] <= 'M')
             {
-                maxId = _sadb.USER.Select(u => u.Id).DefaultIfEmpty().Max();
-                u.Id = (maxId > 0) ? maxId + 2 : 2;
+                maxId = _sadb.USER.Select(i => i.Id).ToList();
+                maxId.Sort();
+                u.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+
                 _sadb.USER.Add(u);
                 _sadb.SaveChanges();
             }
             else
             {
-                maxId = _apdb.USER.Select(u => u.Id).DefaultIfEmpty().Max();
-                u.Id = (maxId > 0) ? maxId + 2 : 1;
+                maxId = _apdb.USER.Select(i => i.Id).ToList();
+                maxId.Sort();
+                u.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 1;
 
                 _apdb.USER.Add(u);
                 _apdb.SaveChanges();
             }
 
-            return maxId;
+            return u.Id;
         }
 
         //Read
@@ -113,10 +116,46 @@ namespace E_commerce.Models.Repositories
         //in case there are other modifications than the name only to the user 
         public Boolean UpdateUserName(int oldId, USER newUser)
         {
+            if (newUser.Name[0] <= 'M')
+            {
+                if(oldId % 2 == 0)
+                {
+                    //then the user stayes in same db
+                    var modified = _sadb.USER.Attach(newUser);
+                    modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    _sadb.SaveChanges();
+
+                    return true;
+                }
+            }
+            else if (newUser.Name[0] > 'M')
+            {
+                if (oldId % 2 != 0)
+                {
+                    //then the user stayes in same db
+                    var modified = _apdb.USER.Attach(newUser);
+                    modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    _sadb.SaveChanges();
+
+                    return true;
+                }
+            }
+
             Boolean check = DeleteUser(oldId);
             if (check)
             {
-                AddUser(newUser);
+                int newId = AddUser(newUser);
+                List<ACCOUNT2> acc = _apdb.ACCOUNT.Where(i => i.User_Id == oldId).ToList();
+                if(acc.Any())
+                {
+                    foreach (ACCOUNT2 a in acc)
+                    {
+                        a.User_Id = newId;
+                        var modified = _apdb.ACCOUNT.Attach(a);
+                        modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+                    }
+                    _apdb.SaveChanges();
+                }
                 return true;
             }
             return false;
