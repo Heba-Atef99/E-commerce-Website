@@ -58,17 +58,17 @@ namespace E_commerce.Models.Repositories
             return types;
         }
 
-        public TYPE GetItemById(int typeId)
+        public TYPE GetTypeById(int typeId)
         {
             TYPE t;
 
             if (typeId % 2 == 0)
             {
-                t = _sadb.TYPE.Where(i => i.Id == typeId).Single();
+                t = _sadb.TYPE.Where(i => i.Id == typeId).DefaultIfEmpty().Single();
             }
             else
             {
-                t = _apdb.TYPE.Where(i => i.Id == typeId).Single();
+                t = _apdb.TYPE.Where(i => i.Id == typeId).DefaultIfEmpty().Single();
             }
 
             return t;

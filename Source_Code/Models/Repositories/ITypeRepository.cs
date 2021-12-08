@@ -9,6 +9,6 @@ namespace E_commerce.Models.Repositories
     {
         public int AddType(TYPE t);
         public IEnumerable<TYPE> GetAllTypes();
-        public TYPE GetItemById(int typeId);
+        public TYPE GetTypeById(int typeId);
     }
 }
