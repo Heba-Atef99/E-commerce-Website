@@ -20,18 +20,21 @@ namespace E_commerce.Models.Repositories
         //create
         public void AddToCart(CART c)
         {
-            int maxId = 0;
+            List<int> maxId;
             if (c.Account_Id % 2 == 0)
             {
-                maxId = _sadb.CART.Select(i => i.Id).DefaultIfEmpty().Max();
-                c.Id = (maxId > 0) ? maxId + 2 : 2;
+                maxId = _sadb.CART.Select(i => i.Id).ToList();
+                maxId.Sort();
+                c.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+
                 _sadb.CART.Add(c);
                 _sadb.SaveChanges();
             }
             else
             {
-                maxId = _apdb.CART.Select(i => i.Id).DefaultIfEmpty().Max();
-                c.Id = (maxId > 0) ? maxId + 2 : 1;
+                maxId = _apdb.CART.Select(i => i.Id).ToList();
+                maxId.Sort();
+                c.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 1;
 
                 _apdb.CART.Add(c);
                 _apdb.SaveChanges();
