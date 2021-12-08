@@ -7,7 +7,7 @@ namespace E_commerce.Models.Repositories
 {
     public interface IPromotedItemRepository
     {
-        public void AddPromotedItem(PROMOTED_ITEM i);
+        public int AddPromotedItem(PROMOTED_ITEM i);
         public IEnumerable<PROMOTED_ITEM> GetAllPromotedItems();
         public IEnumerable<PROMOTED_ITEM> GetPromotedItemsByAccId(int accId);
         public PROMOTED_ITEM GetPromotedItemById(int promotedItemId);

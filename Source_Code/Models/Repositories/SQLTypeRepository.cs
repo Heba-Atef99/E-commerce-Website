@@ -19,27 +19,34 @@ namespace E_commerce.Models.Repositories
 
         public int AddType(TYPE t)
         {
-            List<int> maxId;
-            if (t.Type[0] <= 'M')
+            List<TYPE> check1 = _apdb.TYPE.Where(i => i.Type == t.Type).ToList();
+            List<TYPE> check2 = _sadb.TYPE.Where(i => i.Type == t.Type).ToList();
+            if (check1.Any() == false && check2.Any() == false)
             {
-                maxId = _sadb.TYPE.Select(i => i.Id).ToList();
-                maxId.Sort();
-                t.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
 
-                _sadb.TYPE.Add(t);
-                _sadb.SaveChanges();
+                List<int> maxId;
+                if (t.Type[0] <= 'M')
+                {
+                    maxId = _sadb.TYPE.Select(i => i.Id).ToList();
+                    maxId.Sort();
+                    t.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+
+                    _sadb.TYPE.Add(t);
+                    _sadb.SaveChanges();
+                }
+                else
+                {
+                    maxId = _apdb.TYPE.Select(i => i.Id).ToList();
+                    maxId.Sort();
+                    t.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 1;
+
+                    _apdb.TYPE.Add(t);
+                    _apdb.SaveChanges();
+                }
+
+                return t.Id;
             }
-            else
-            {
-                maxId = _apdb.TYPE.Select(i => i.Id).ToList();
-                maxId.Sort();
-                t.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 1;
-
-                _apdb.TYPE.Add(t);
-                _apdb.SaveChanges();
-            }
-
-            return t.Id;
+            return 0;
         }
 
         public IEnumerable<TYPE> GetAllTypes()

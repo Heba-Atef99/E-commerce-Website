@@ -20,18 +20,23 @@ namespace E_commerce.Models.Repositories
         //Create
         public int AddAccount(ACCOUNT a)
         {
-            List<int> maxId = _apdb.ACCOUNT.Select(i => i.Id).ToList();
-            maxId.Sort();
-            int id = (maxId.Any() == true) ? maxId.Last() + 1 : 1;
-            //email & Pass on sadb
-            ACCOUNT1 a1 = new ACCOUNT1 { Id = id, Email = a.Email, Pass = a.Pass };
-            ACCOUNT2 a2 = new ACCOUNT2 { Id = id, User_Id = a.User_Id, Balance = a.Balance };
-            _sadb.ACCOUNT.Add(a1);
-            _apdb.ACCOUNT.Add(a2);
+            List<ACCOUNT2> check = _apdb.ACCOUNT.Where(i => i.User_Id == a.User_Id).ToList();
+            if (check.Any() == false)
+            {
+                List<int> maxId = _apdb.ACCOUNT.Select(i => i.Id).ToList();
+                maxId.Sort();
+                int id = (maxId.Any() == true) ? maxId.Last() + 1 : 1;
+                //email & Pass on sadb
+                ACCOUNT1 a1 = new ACCOUNT1 { Id = id, Email = a.Email, Pass = a.Pass };
+                ACCOUNT2 a2 = new ACCOUNT2 { Id = id, User_Id = a.User_Id, Balance = a.Balance };
+                _sadb.ACCOUNT.Add(a1);
+                _apdb.ACCOUNT.Add(a2);
 
-            _sadb.SaveChanges();
-            _apdb.SaveChanges();
-            return id;
+                _sadb.SaveChanges();
+                _apdb.SaveChanges();
+                return id;
+            }
+            return 0;
         }
 
         //Read

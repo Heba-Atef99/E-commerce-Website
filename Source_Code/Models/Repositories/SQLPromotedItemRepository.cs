@@ -18,27 +18,35 @@ namespace E_commerce.Models.Repositories
         }
 
         //Create
-        public void AddPromotedItem(PROMOTED_ITEM i)
+        public int AddPromotedItem(PROMOTED_ITEM i)
         {
-            List<int> maxId;
-            if (i.Item_Id % 2 == 0)
+            List<PROMOTED_ITEM> check1 = _apdb.PROMOTED_ITEM.Where(t => t.Item_Id == i.Item_Id && t.Promoted_Account_Id == i.Promoted_Account_Id).ToList();
+            List<PROMOTED_ITEM> check2 = _sadb.PROMOTED_ITEM.Where(t => t.Item_Id == i.Item_Id && t.Promoted_Account_Id == i.Promoted_Account_Id).ToList();
+            if (check1.Any() == false && check2.Any() == false)
             {
-                maxId = _sadb.PROMOTED_ITEM.Select(i => i.Id).ToList();
-                maxId.Sort();
-                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
 
-                _sadb.PROMOTED_ITEM.Add(i);
-                _sadb.SaveChanges();
-            }
-            else
-            {
-                maxId = _apdb.PROMOTED_ITEM.Select(i => i.Id).ToList();
-                maxId.Sort();
-                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+                List<int> maxId;
+                if (i.Item_Id % 2 == 0)
+                {
+                    maxId = _sadb.PROMOTED_ITEM.Select(i => i.Id).ToList();
+                    maxId.Sort();
+                    i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
 
-                _apdb.PROMOTED_ITEM.Add(i);
-                _apdb.SaveChanges();
+                    _sadb.PROMOTED_ITEM.Add(i);
+                    _sadb.SaveChanges();
+                }
+                else
+                {
+                    maxId = _apdb.PROMOTED_ITEM.Select(i => i.Id).ToList();
+                    maxId.Sort();
+                    i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+
+                    _apdb.PROMOTED_ITEM.Add(i);
+                    _apdb.SaveChanges();
+                }
+                return i.Id;
             }
+            return 0;
         }
 
         //Read
