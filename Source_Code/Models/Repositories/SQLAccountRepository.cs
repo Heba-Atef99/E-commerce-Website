@@ -75,9 +75,10 @@ namespace E_commerce.Models.Repositories
                 exist1 = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null)
                 {
-                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
-
-                    var modified = _sadb.ACCOUNT.Attach(acc1);
+                    //ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
+                    exist1.Email = updatedAcc.Email;
+                    exist1.Pass = updatedAcc.Pass;
+                    var modified = _sadb.ACCOUNT.Attach(exist1);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _sadb.SaveChanges();
                     return true;
@@ -88,8 +89,10 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist2 != null)
                 {
-                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
-                    var modified = _apdb.ACCOUNT.Attach(acc2);
+                    //ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
+                    exist2.Balance = updatedAcc.Balance;
+                    exist2.User_Id = updatedAcc.User_Id;
+                    var modified = _apdb.ACCOUNT.Attach(exist2);
                     modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
                     return true;
@@ -101,14 +104,18 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null && exist2 != null)
                 {
-                    ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
-                    ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
+                    //ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
+                    //ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
+                    exist1.Email = updatedAcc.Email;
+                    exist1.Pass = updatedAcc.Pass;
+                    exist2.Balance = updatedAcc.Balance;
+                    exist2.User_Id = updatedAcc.User_Id;
 
-                    var modified1 = _sadb.ACCOUNT.Attach(acc1);
+                    var modified1 = _sadb.ACCOUNT.Attach(exist1);
                     modified1.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _sadb.SaveChanges();
 
-                    var modified2 = _apdb.ACCOUNT.Attach(acc2);
+                    var modified2 = _apdb.ACCOUNT.Attach(exist2);
                     modified2.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                     _apdb.SaveChanges();
                     return true;
