@@ -1,8 +1,10 @@
 ﻿using E_commerce.Models;
 using E_commerce.Models.Repositories;
 using E_commerce.View_Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Crypto.Generators;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,23 +42,6 @@ namespace E_commerce.Controllers
         [HttpPost]
         public IActionResult SignUp(Signup ob)
         {
-            ACCOUNT acc = new ACCOUNT
-            {
-                Email = ob.Email,
-                Pass = ob.Password,
-            };
-            IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
-            foreach (var ac in a)
-            {
-                if(ac.Email == ob.Email) 
-                {
-                    ViewBag.EmailExistError = "You have already signed up";
-                    return Redirect("/Home/index");
-                }
-                
-            }
-
-                 _logger.AddAccount(acc);
             USER u = new USER
             {
                 Name = ob.Name,
@@ -64,15 +49,34 @@ namespace E_commerce.Controllers
                 Phone = ob.Phone,
                 Address = ob.Address,
             };
+            ACCOUNT acc = new ACCOUNT
+            {
+                Email = ob.Email,
+                Pass = BCrypt.Net.BCrypt.HashPassword(ob.Password),
+            };
+            IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
+            foreach (var ac in a)
+            {
+                if(ac.Email == ob.Email) 
+                {
+                    ViewBag.messageError = "You have already signed up";
+                    return View();
+                }
+                
+            }
+                
             _user.AddUser(u);
-
+            acc.User_Id = u.Id;
+            _logger.AddAccount(acc);
+            HttpContext.Session.SetInt32("User_Reg_Id",acc.Id);
+            
             return Redirect("/Home/homepage");
 
         }
         public IActionResult Homepage()
         {
-            IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
-            return View(a);
+            IEnumerable<ACCOUNT1> us = _logger.GetAllAccountEmailsAndPass();
+            return View(us);
         }
         ///login
         [HttpGet]
@@ -94,28 +98,33 @@ namespace E_commerce.Controllers
             {
                 if (acc.Email == objc.Email)
                 {
-                    if(acc.Pass==objc.Password)
+                    if(BCrypt.Net.BCrypt.Verify(objc.Password, acc.Pass))
                     {
+                        HttpContext.Session.SetInt32("User_Reg_Id", acc.Id);
                         return Redirect("/Home/welcome");
                     }
                     else 
                     {
-                        ViewBag.PasswordError = "wrong password";
+                        ViewBag.messageError = "wrong password";
                         return View();
                     }
                    
                 }
-                else 
-                {
-                    ViewBag.EmailExistError = "You need to signed up first";
-                }
-
             }
+            ViewBag.messageError = "You need to signed up first";
             return View();
         }
         public IActionResult welcome()
         {
             return View();
         }
+       
+            [HttpPost]
+        public IActionResult Logout(logoutvm L)
+        {
+            if (L != null) HttpContext.Session.SetInt32("User_Reg_Id", 0);
+            return Redirect("/Home/index");
+        }
+
     }
 }
