@@ -58,8 +58,22 @@ namespace E_commerce.Controllers
         public IActionResult Inventory()
         {
             IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
-            return View(t);
-            //return View();
+            ViewBag.list = t;
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Inventory(EditItemVM obj)
+        {
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            ViewBag.list = t;
+            ITEM entity = new ITEM();
+            //entity = obj.ITEM;
+
+            entity.Id = obj.Id;
+            entity = _itemRepo.GetItemById(entity.Id);
+            return View();
         }
         public IActionResult Add()
         {
@@ -101,29 +115,56 @@ namespace E_commerce.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EditItemVM obj)
         {
-            ITEM entity= _itemRepo.GetItemById(1);
+
+            ITEM entity = _itemRepo.GetItemById(1);
             entity.Id = 1;
             entity.Name = obj.Name;
-            entity.Type= obj.Type;
-            entity.Original_Count= obj.Original_Count;
+            //entity.Type = obj.Type;
+            entity.Original_Count = obj.Original_Count;
             entity.Available_Count = obj.Available_Count;
-            entity.Description= obj.Description;
-            entity.Price= obj.Price;
-            entity.Date= obj.Date;
-            entity.Image= obj.Image;
-            entity.Owner_Account_Id= 1;
-            Boolean x= _itemRepo.UpdateItem(entity);
+            entity.Description = obj.Description;
+            entity.Price = obj.Price;
+            entity.Date = obj.Date;
+            entity.Image = obj.Image;
+            entity.Owner_Account_Id = 1;
+            Boolean x = _itemRepo.UpdateItem(entity);
             //Boolean y=_itemRepo.UpdateItemType(entity, obj.Type);
 
             return Redirect("/Item/Inventory");
-
             //return View();
         }
 
         public IActionResult Delete()
         {
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            var tt = t.ToList();
+            ViewBag.items=tt;
             return View();
-        }
 
+
+            //return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete( DeleteItemVM obj)
+        {
+            //IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            var tt = t.ToList();
+            ViewBag.items = tt;
+
+            ITEM entity = new ITEM();
+            //entity = obj.ITEM;
+            
+            entity.Id=obj.Id;
+            entity = _itemRepo.GetItemById(entity.Id);
+            
+            _itemRepo.DeleteItem( entity.Type,entity.Id);
+
+            return Redirect("/Item/Inventory");
+
+            //return View();
+        }
     }
 }

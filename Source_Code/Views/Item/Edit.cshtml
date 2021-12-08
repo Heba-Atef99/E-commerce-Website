@@ -1,7 +1,9 @@
-﻿@model ITEM
+﻿@*@model E_commerce.ViewModels.ItemVM.EditItemVM*@
+@model ITEM
 @*var Item= viewbag.Item;*@
 @{
     ViewData["Title"] = "Edit";
+    //var Item = ViewBag.Item;
 }
 
 @*<h1>Edit</h1>*@
@@ -24,13 +26,21 @@
                 
                 
                 <div class="row justify-content-center text-center">
-                    <b> Category:</b>
+                    <b class="mb-3 mt-2"> Category:    @Model.Type </b>
+                    @*<b class="mb-3 mt-2 col-2" asp-for ="Type" value="@Model.Type"> @Model.Type </b>*@
+                </div>
+
+               @* <div class="row justify-content-center">
+                    <b class="mb-3 mt-2 col-5" asp-for ="Type" value="@Model.Type"> @Model.Type </b>
+                </div>
+               *@ 
+               <div class="row justify-content-center text-center">
+                    <b> Available Count:</b> 
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5" asp-for ="Type" value="@Model.Type"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Available_Count" value="@Model.Available_Count"/>
                 </div>
-                
                 <div class="row justify-content-center text-center">
                     <b> Original Count:</b> 
                 </div>
