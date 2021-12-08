@@ -1,0 +1,20 @@
+﻿@model int
+<form method="get">
+    <div class="m-auto" style="width:fit-content">
+        <div class="row justify-content-center mt-5 mb-5">
+            <span class="badge badge-info p-3 display-2" style="font-size:1rem;">
+                Current Balance: <span class="badge badge-light">@Model $</span>
+            </span>
+        </div>
+        <div class="form-group">
+            <label class="text-success h3">How much money?</label>
+            <textarea class="form-control"></textarea>
+        </div>
+        <a href="Owner">Haven't added visa/credit card?</a>
+        <div class="row justify-content-center mb-5">
+            <button name="btn" class="btn btn-success" value="Deposit" asp-action="Deposit" type="submit">Deposit</button>
+        </div>
+
+
+    </div>
+</form>

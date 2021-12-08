@@ -1,21 +1,25 @@
-﻿@model IEnumerable<ITEM>
+﻿@{
+    var model = ViewBag.data1;
+    var shared= ViewBag.data2;
+    
+}
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
 <div class="row mt-5">
-    @foreach (var item in Model)
+    @foreach (var item in model)
     {
         <div class="card col-md-3 mx-2 mb-3 p-0">
             <div class="card-body">
                 <h4 class="card-title text-danger">@item.Name </h4>
                 <div class="card-text">
-                    <a class="btn btn-info from-control text-white">share</a>
+                    <form method="get">
+                        <button name="share" class="btn btn-success" value="@item.Id" asp-action="Owner" type="submit">share</button>
+                    </form>
                     <h6>Type: @item.Type</h6>
                     <h6>price: @item.Price</h6>
                     <h6>Discription: @item.Description</h6>
-                    <a class="btn btn-info from-control text-white">add to cart</a>
+                     <form method="get">
+                          <button name="add" class="btn btn-success" value="@item.Id" asp-action="Owner" type="submit">add to cart</button>
+                     </form>
                 </div>
                 <img width="70" height="70" src="~@item.Image" alt="img" />
             </div>
@@ -24,4 +28,27 @@
 
 
 
-    </div>
+</div>
+
+
+<div class="row mt-5">
+    @foreach (var item in shared)
+    {
+        <div class="card col-md-3 mx-2 mb-3 p-0">
+            <div class="card-body">
+                <h4 class="card-title text-danger">@item.Name </h4>
+                <div class="card-text">
+                    <button name="share" class="btn btn-success" value="@item.Id" asp-action="Owner" type="submit">share</button>
+                    <h6>Type: @item.Type</h6>
+                    <h6>price: @item.Price</h6>
+                    <h6>Discription: @item.Description</h6>
+                    <button name="add" class="btn btn-success" value="@item.Id" asp-action="Owner" type="submit">add to cart</button>
+                </div>
+                <img width="70" height="70" src="~@item.Image" alt="img" />
+            </div>
+        </div>
+    }
+
+
+
+</div>
