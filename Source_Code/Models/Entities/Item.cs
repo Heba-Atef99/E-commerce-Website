@@ -15,7 +15,7 @@ namespace E_commerce.Models
         public int Type { get; set; }
         public string Description { get; set; }
         public int Price { get; set; }
-        public string Image { get; set; }
+        public string Image { get; set; } = "/avatar/default.png";
         public DateTime Date { get; set; }
         public int Original_Count { get; set; }
         public int Available_Count { get; set; }
