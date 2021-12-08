@@ -20,16 +20,18 @@ namespace E_commerce.Models.Repositories
         //Create
         public int AddAccount(ACCOUNT a)
         {
-            int maxId = _apdb.ACCOUNT.Select(a => a.Id).DefaultIfEmpty().Max();
+            List<int> maxId = _apdb.ACCOUNT.Select(i => i.Id).ToList();
+            maxId.Sort();
+            int id = (maxId.Any() == true) ? maxId.Last() + 1 : 1;
             //email & Pass on sadb
-            ACCOUNT1 a1 = new ACCOUNT1 { Id = maxId + 1, Email = a.Email, Pass = a.Pass };
-            ACCOUNT2 a2 = new ACCOUNT2 { Id = maxId + 1, User_Id = a.User_Id, Balance = a.Balance };
+            ACCOUNT1 a1 = new ACCOUNT1 { Id = id, Email = a.Email, Pass = a.Pass };
+            ACCOUNT2 a2 = new ACCOUNT2 { Id = id, User_Id = a.User_Id, Balance = a.Balance };
             _sadb.ACCOUNT.Add(a1);
             _apdb.ACCOUNT.Add(a2);
 
             _sadb.SaveChanges();
             _apdb.SaveChanges();
-            return maxId;
+            return id;
         }
 
         //Read
@@ -75,7 +77,6 @@ namespace E_commerce.Models.Repositories
                 exist1 = _sadb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null)
                 {
-                    //ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
                     exist1.Email = updatedAcc.Email;
                     exist1.Pass = updatedAcc.Pass;
                     var modified = _sadb.ACCOUNT.Attach(exist1);
@@ -89,7 +90,6 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist2 != null)
                 {
-                    //ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
                     exist2.Balance = updatedAcc.Balance;
                     exist2.User_Id = updatedAcc.User_Id;
                     var modified = _apdb.ACCOUNT.Attach(exist2);
@@ -104,8 +104,6 @@ namespace E_commerce.Models.Repositories
                 exist2 = _apdb.ACCOUNT.Where(i => i.Id == updatedAcc.Id).FirstOrDefault();
                 if (exist1 != null && exist2 != null)
                 {
-                    //ACCOUNT1 acc1 = new ACCOUNT1 { Id = updatedAcc.Id, Email = updatedAcc.Email, Pass = updatedAcc.Pass };
-                    //ACCOUNT2 acc2 = new ACCOUNT2 { Id = updatedAcc.Id, Balance = updatedAcc.Balance, User_Id = updatedAcc.User_Id };
                     exist1.Email = updatedAcc.Email;
                     exist1.Pass = updatedAcc.Pass;
                     exist2.Balance = updatedAcc.Balance;

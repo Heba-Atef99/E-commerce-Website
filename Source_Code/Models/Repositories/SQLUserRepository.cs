@@ -145,15 +145,12 @@ namespace E_commerce.Models.Repositories
             if (check)
             {
                 int newId = AddUser(newUser);
-                List<ACCOUNT2> acc = _apdb.ACCOUNT.Where(i => i.User_Id == oldId).ToList();
-                if(acc.Any())
+                ACCOUNT2 acc = _apdb.ACCOUNT.Where(i => i.User_Id == oldId).Single();
+                if(acc != null)
                 {
-                    foreach (ACCOUNT2 a in acc)
-                    {
-                        a.User_Id = newId;
-                        var modified = _apdb.ACCOUNT.Attach(a);
-                        modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                    }
+                    acc.User_Id = newId;
+                    var modified = _apdb.ACCOUNT.Attach(acc);
+                    modified.State = Microsoft.EntityFrameworkCore.EntityState.Modified;                    
                     _apdb.SaveChanges();
                 }
                 return true;

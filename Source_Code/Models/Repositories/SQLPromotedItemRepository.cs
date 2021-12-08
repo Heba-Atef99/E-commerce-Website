@@ -20,18 +20,21 @@ namespace E_commerce.Models.Repositories
         //Create
         public void AddPromotedItem(PROMOTED_ITEM i)
         {
-            int maxId = 0;
+            List<int> maxId;
             if (i.Item_Id % 2 == 0)
             {
-                maxId = _sadb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
-                i.Id = (maxId > 0) ? maxId + 2 : 2;
+                maxId = _sadb.PROMOTED_ITEM.Select(i => i.Id).ToList();
+                maxId.Sort();
+                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+
                 _sadb.PROMOTED_ITEM.Add(i);
                 _sadb.SaveChanges();
             }
             else
             {
-                maxId = _apdb.ITEM.Select(i => i.Id).DefaultIfEmpty().Max();
-                i.Id = (maxId > 0) ? maxId + 2 : 1;
+                maxId = _apdb.PROMOTED_ITEM.Select(i => i.Id).ToList();
+                maxId.Sort();
+                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
 
                 _apdb.PROMOTED_ITEM.Add(i);
                 _apdb.SaveChanges();

@@ -20,10 +20,13 @@ namespace E_commerce.Models.Repositories
         //create
         public void AddTransaction(TRANSACTION_HISTORY i)
         {
-            int maxId = _apdb.TRANSACTION_HISTORY.Select(a => a.Id).DefaultIfEmpty().Max();
+            List<int> maxId = _apdb.TRANSACTION_HISTORY.Select(i => i.Id).ToList();
+            maxId.Sort();
+            int id = (maxId.Any() == true) ? maxId.Last() + 1 : 1;
+
             //email & Pass on sadb
-            TRANSACTION1 t1 = new TRANSACTION1 { Id = maxId + 1, Money = i.Money, Receiver_Id = i.Receiver_Id };
-            TRANSACTION2 t2 = new TRANSACTION2 { Id = maxId + 1, Sender_Id = i.Sender_Id };
+            TRANSACTION1 t1 = new TRANSACTION1 { Id = id, Money = i.Money, Receiver_Id = i.Receiver_Id };
+            TRANSACTION2 t2 = new TRANSACTION2 { Id = id, Sender_Id = i.Sender_Id };
             _sadb.TRANSACTION_HISTORY.Add(t1);
             _apdb.TRANSACTION_HISTORY.Add(t2);
 
