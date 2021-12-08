@@ -11,10 +11,10 @@ namespace E_commerce.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? Item_Id { get; set; }
+        public int Item_Id { get; set; }
         [ForeignKey ("Item_Id")]
         public virtual ITEM ITEM { get; set; }
-        public int? Account_Id { get; set; }
+        public int Account_Id { get; set; }
         [ForeignKey("Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
         public int Item_count { get; set; }

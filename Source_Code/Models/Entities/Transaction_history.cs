@@ -11,10 +11,10 @@ namespace E_commerce.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? Receiver_Id { get; set; }
+        public int Receiver_Id { get; set; }
         [ForeignKey("Receiver_Id")]
         
-        public int? Sender_Id { get; set; }
+        public int Sender_Id { get; set; }
         [ForeignKey("Sender_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
         
@@ -25,7 +25,7 @@ namespace E_commerce.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? Receiver_Id { get; set; }
+        public int Receiver_Id { get; set; }
         [ForeignKey("Receiver_Id")]
 
         public int Money { get; set; }
@@ -35,7 +35,7 @@ namespace E_commerce.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? Sender_Id { get; set; }
+        public int Sender_Id { get; set; }
         [ForeignKey("Sender_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
     }

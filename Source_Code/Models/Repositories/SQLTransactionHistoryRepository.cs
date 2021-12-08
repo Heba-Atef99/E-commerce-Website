@@ -53,8 +53,8 @@ namespace E_commerce.Models.Repositories
             List<TRANSACTION2> t2 = _apdb.TRANSACTION_HISTORY.ToList();
             List<TRANSACTION1> t1 = _sadb.TRANSACTION_HISTORY.Where(a => a.Receiver_Id == accId).ToList();
 
-            IEnumerable<TRANSACTION_HISTORY> TH = t2.Join(t1, i1 => i1.Id, i2 => i2.Id,
-                (i1, i2) => new TRANSACTION_HISTORY
+            IEnumerable<TRANSACTION_HISTORY> TH = t1.Join(t2, i2 => i2.Id, i1 => i1.Id,
+                (i2, i1) => new TRANSACTION_HISTORY
                 {
                     Id = i1.Id,
                     Sender_Id = i1.Sender_Id,
