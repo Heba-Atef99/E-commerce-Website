@@ -10,23 +10,26 @@ using E_commerce.Models;
 
 namespace E_commerce.Controllers
 {
-    public class OwnerController : Controller
+    public class AccountController : Controller
     {
         private readonly IItemRepository _itemRepo;
         private readonly IPromotedItemRepository _PromotedItemRepo;
         private readonly ICartRepository _CartRepo;
-
-        public OwnerController(IItemRepository itemRepository, IPromotedItemRepository PromotedItemRepoRepository, ICartRepository CartRepository)
+        private readonly IAccountRepository _AccountRepository;
+        public AccountController(IItemRepository itemRepository,
+            IPromotedItemRepository PromotedItemRepoRepository, ICartRepository CartRepository,
+            IAccountRepository AccountRepository)
         {
             _itemRepo = itemRepository;
             _PromotedItemRepo = PromotedItemRepoRepository;
             _CartRepo = CartRepository;
+            _AccountRepository = AccountRepository;
         }
          
         public IActionResult Owner(int add, int share)
         {
-            int loginaccount = 2;
-            int owneraccount = 1;
+            int loginaccount = 1;
+            int owneraccount = 3;
             
             PROMOTED_ITEM promoted = new PROMOTED_ITEM();
             CART cart = new CART();
@@ -41,6 +44,7 @@ namespace E_commerce.Controllers
             {
                 cart.Item_Id = add;
                 cart.Account_Id = loginaccount;
+                cart.Item_count = 1;
                 _CartRepo.AddToCart(cart);
             }
 
@@ -49,10 +53,12 @@ namespace E_commerce.Controllers
             var result = p.Select(O => O.Item_Id)
                         .ToList();
             List<ITEM> PromotedItem = new List<ITEM>();
+            ITEM l = new ITEM();
             for (int i = 0; i < result.Count; i++)
             {
-                ITEM l = _itemRepo.GetItemById(i);
-                PromotedItem.Add(l);
+
+                l = _itemRepo.GetItemById(result[i]);
+                 PromotedItem.Add(l);
             }
 
 
@@ -61,15 +67,22 @@ namespace E_commerce.Controllers
             
             return View();
         }
-        public IActionResult Deposit(string btn)
+        public IActionResult Deposit(string btn,string add)
         {
-            int t = 0;
-            if (btn != null)
+            string t = "";
+            int loginaccount = 1;
+            ACCOUNT account = _AccountRepository.GetAccountByAccId(loginaccount);
+            //int balance = account.Balance;
+            
+            if (btn != null&&add != null)
             {
-                 t = 10;
+                account.Balance = account.Balance + int.Parse(add);
+                bool k = _AccountRepository.UpdateAccount(account, 0);
+
             }
             
-            return View(t);
+            ViewBag.deposit = account.Balance;
+            return View();
         }
        
 
