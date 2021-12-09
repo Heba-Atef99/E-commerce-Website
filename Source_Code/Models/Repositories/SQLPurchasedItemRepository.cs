@@ -34,7 +34,7 @@ namespace E_commerce.Models.Repositories
             {
                 maxId = _apdb.PURCHASED_ITEM.Select(i => i.Id).ToList();
                 maxId.Sort();
-                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 2;
+                i.Id = (maxId.Any() == true) ? maxId.Last() + 2 : 1;
 
                 _apdb.PURCHASED_ITEM.Add(i);
                 _apdb.SaveChanges();
