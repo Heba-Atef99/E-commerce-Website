@@ -1,0 +1,81 @@
+﻿
+@model E_commerce.View_Models.Search
+
+@{
+    ViewData["Title"] = "CatItems";
+    var items = ViewBag.sitems;
+    var owners = ViewBag.owners;
+
+}
+<div style="background-color:dimgray; padding:12px 0px 0px 10px;" @*class="container-fluid"*@>
+    <form asp-action="CatItems">
+        <div class="row">
+            <div class="col-8 ">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    @*<label asp-for="Name" class="control-label"></label>*@
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <input type="submit" value="Search" class="btn btn-warning" />
+                </div>
+            </div>
+        </div>
+
+
+
+    </form>
+</div>
+
+
+        <div class="row mt-5">
+            @foreach (var t in owners)
+            {
+                <div class="card col-md-3 mx-2 mb-3 p-0, " style="border-radius:50px;">
+                    <div class="card-body">
+                        <h4 class="card-title text-danger">@t.item.Name </h4>
+                        <div class="card-text">
+                            @*<button name="share" class="btn btn-success" value="@item.Id" asp-action="Owner" type="submit">share</button>*@
+                            @*<h6>Type: @item.Type</h6>*@
+                            <h6>Price: @t.item.Price</h6>
+                            <h6>Discription: @t.item.Description</h6>
+                            @*<form method="get" >*@
+                            @*<a asp-controller="Home" asp-action="About">*@
+
+                            <!--<button--> @*href="~/Home/about"*@ <!--style="margin-bottom:10px;" name="owner_id"
+                                    class="btn btn-outline-secondary" asp-action="CatItems" value="@t.item.Owner_Account_Id" type="submit">
+                                By @t.owner
+                            </button>-->
+                        <form method="get">
+                         <button name="owner_id" class="btn btn-outline-secondary" value="@t.item.Owner_Account_Id"  type="submit">By @t.owner</button>
+                        </form>
+                            <br/>
+
+                            @*</a>*@
+                            @*</form>*@
+
+                            @*<br />*@
+                            @*<h6>Owner: @t.owner</h6>*@
+
+                            <button name="add" class="btn btn-success" asp-action="CatItems" value="@t.item.Id" type="submit">Add to cart</button>
+
+                        </div>
+                        <img width="140" height="140" src="~@t.item.Image" alt="img" />
+                    </div>
+                </div>
+
+            }
+
+
+
+        </div>
+<h6 style="color:#ff0000">
+    @ViewBag.Fail </ h6 >
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
