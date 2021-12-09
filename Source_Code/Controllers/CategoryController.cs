@@ -56,24 +56,24 @@ namespace E_commerce.Controllers
 
             return View();
         }
-        public IActionResult CatItems(int add,int owner_id)
+        public IActionResult CatItems(int add,int owner_id,int Sort, Search search_string)
         {
             
-            int login_account=1;
-            //int login_account = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            //int login_account=1;
+            int login_account = (int)HttpContext.Session.GetInt32("User_Reg_Id");
             //int type_id = 1;
             int type_id = (int)HttpContext.Session.GetInt32("Type_Id");
             IEnumerable<ITEM> items = _item.GetAllItems();
             var type_exist = items.ToList().Any(u => u.Type == type_id);
             CART c = new CART();
             List<ITEM> sel_items = new List<ITEM>();
-            sel_items = items.Where(u => u.Type == type_id && u.Status==1).ToList();
+            sel_items = items.Where(u => u.Type == type_id && u.Status==1).OrderBy(i=>i.Name).ToList();
 
             //List<string> owner_name = new List<string>();
             List<Catitem> cat = new List<Catitem>();
             if (type_exist)
             {
-              
+
                 //for (int i = 0; i < 1; i++)
                 //{
                 //    ITEM item = sel_items[0];
@@ -84,7 +84,19 @@ namespace E_commerce.Controllers
                 //    Catitem f = new Catitem(item, name);
                 //    cat.Add(f);
                 //}
+                if (search_string.Name != null)
+                {
+                     sel_items = sel_items.Where(i => i.Name.Contains(search_string.Name)).ToList();
+                    
 
+                }
+                if (search_string.Sort!=null)
+                {
+                    sel_items = sel_items.OrderBy(i => i.Price).ToList();
+                    if(search_string.Sort =="DSC")
+                        sel_items = sel_items.OrderByDescending(i => i.Price).ToList();
+
+                }
                 foreach (var item in sel_items)
                 {
                     int account_id = item.Owner_Account_Id;
@@ -110,8 +122,9 @@ namespace E_commerce.Controllers
                     return Redirect("/Account/Owner");
 
                 }
+                
 
-               
+                
             }
             else
             {
@@ -123,20 +136,20 @@ namespace E_commerce.Controllers
             return View();
         }
         [HttpGet]
-        //public IActionResult Show()
-        //{
+        public IActionResult Show()
+        {
 
-        //    IEnumerable<ITEM> t1 = _item.GetAllItems();
-        //    IEnumerable<USER> t = _user.GetAllUsers();
-        //    ViewBag.data1 = t;
-        //    ViewBag.data2 = t1;
-            
+            IEnumerable<ITEM> t1 = _item.GetAllItems();
+            IEnumerable<USER> t = _user.GetAllUsers();
+            ViewBag.data1 = t;
+            ViewBag.data2 = t1;
 
-        //    //var ac = _account.GetAccountByUserId(19);
-        //    //ViewBag.acc = ac;
 
-        //    return View();
-        //}
+            //var ac = _account.GetAccountByUserId(19);
+            //ViewBag.acc = ac;
+
+            return View();
+        }
 
 
         //public IActionResult Show()
