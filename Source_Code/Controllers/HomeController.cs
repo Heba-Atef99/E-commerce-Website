@@ -111,7 +111,7 @@ namespace E_commerce.Controllers
                    
                 }
             }
-            ViewBag.messageError = "You need to signed up first";
+            ViewBag.messageError = "You need to sign up first";
             return View();
         }
         public IActionResult welcome()
@@ -126,5 +126,9 @@ namespace E_commerce.Controllers
             return Redirect("/Home/index");
         }
 
+        public IActionResult ContactUs()
+        {
+            return View();
+        }
     }
 }
