@@ -45,9 +45,10 @@ namespace E_commerce.Controllers
          
         public IActionResult Owner(int add, int share)
         {
-            int loginaccount = 3;
-            //int loginaccount = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            int owneraccount = 1;
+            //int loginaccount = 3;
+            int loginaccount = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            //int owneraccount = 1;
+            int owneraccount = (int)HttpContext.Session.GetInt32("owner_id");
 
             PROMOTED_ITEM promoted = new PROMOTED_ITEM();
             CART cart = new CART();
@@ -66,7 +67,7 @@ namespace E_commerce.Controllers
                 _CartRepository.AddToCart(cart);
             }
 
-            IEnumerable<ITEM> t = _itemRepository.GetItemsByAccId(owneraccount);
+            IEnumerable<ITEM> t = _itemRepository.GetAvailableItemsByAccId(owneraccount);
             //List<string> owner_name = new List<string>();
             List<compositeitem> cat = new List<compositeitem>();
             foreach (var k in t)
@@ -89,7 +90,11 @@ namespace E_commerce.Controllers
             {
 
                 l = _itemRepository.GetItemById(result[i]);
-                PromotedItem.Add(l);
+                if (l.Status == 1)
+                {
+                    PromotedItem.Add(l);
+                }
+                
             }
             List<compositeitem> cat2= new List<compositeitem>();
             foreach (var k in PromotedItem)
@@ -140,8 +145,8 @@ namespace E_commerce.Controllers
         public IActionResult Deposit(string btn,string add)
         {
             
-            int loginaccount = 1;
-            //int loginaccount = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            //int loginaccount = 1;
+            int loginaccount = (int)HttpContext.Session.GetInt32("User_Reg_Id");
             ACCOUNT account = _AccountRepository.GetAccountByAccId(loginaccount);
             //int balance = account.Balance;
             
