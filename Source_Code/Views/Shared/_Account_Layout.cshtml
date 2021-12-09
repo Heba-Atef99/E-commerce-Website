@@ -7,14 +7,14 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="icon" href="~/favicon.png">
+
 </head>
 <body>
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
 
-            <a asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="~/images/logo.png" height="66" />
-            </a>
+            
             @*<img src="~/images/logo.png" height="66" />*@
             @*<a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">E_commerce</a>*@
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -24,19 +24,33 @@
             <div class="container">
                 <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
 
-
+                    <ul class="navbar-nav">
+                        <li class="nav-item">
+                            <form asp-controller="Home" asp-action="Logout">
+                                <button name="logout" type="submit" value="out" class="btn btn-dark mr-3">Log out</button>
+                            </form>
+                        </li>
+                    </ul>
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="Main">Main</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" href="#about"> About</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Profile">Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Category" asp-action="CatItems">Contact Us</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Inventory">Inventory</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Item" asp-action="Dashboard">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Cart">Cart</a>
                         </li>
 
+
                     </ul>
+
 
                 </div>
             </div>
