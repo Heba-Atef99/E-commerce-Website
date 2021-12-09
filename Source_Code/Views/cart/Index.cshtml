@@ -1,0 +1,119 @@
+﻿@using E_commerce.Models
+
+@model Tuple<List<CART>,List<ITEM>,ACCOUNT> 
+
+
+@{int counter=0;
+
+foreach(var obj in Model.Item2)
+	{
+	counter= counter+obj.Price;
+}
+}
+
+@*@model Tuple<ACCOUNT,IEnumerable<ITEM>,IEnumerable <CART>>*@
+	
+	
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<body>
+<form method="post" asp-action="Index"> 
+<div class="cart-container">
+
+	<h1>Shopping Cart</h1>
+
+	<div class="cart">
+
+		<div class="products">
+			 @for(int i=0;i<Model.Item2.Count();i++)
+        {
+			<div class="product">
+
+				<img src=@Model.Item2[i].Image>
+
+				<div class="product-info">
+					<div>
+					<h3 class="product-name">@Model.Item2[i].Name</h3>
+					</div>
+					<div>
+					<h4 class="product-price">Description:@Model.Item2[i].Description</h4>
+					</div>
+					<div>
+					<h4 class="product-price">Price: @Model.Item2[i].Price</h4>
+					</div>
+					<div class="flex align-content-end">
+			       
+					<p class="product-quantity">Qnt: <input value=@Model.Item1[i].Item_count name="">
+				   
+					
+
+					
+                   <a asp-controller="cart" asp-action="removeCartItem" class="btn btn-primary">
+                    <i class="bi bi-trash"></i> &nbsp; Remove
+                   </a>
+                  
+				  </div>
+						
+
+					
+
+				</div>
+
+			</div>
+		}
+		</div>
+		<div> 
+		<div class="cart-total">
+
+			<p>
+
+				<span>Total Price</span>
+
+				<span>L.E @counter</span>
+
+			</p>
+
+			<p>
+
+				<span>Number of Items</span>
+
+				<span>@Model.Item1.Count()</span>
+
+			</p>
+
+			<div>
+			<a asp-controller="cart" asp-action="ProceedToCheckOut" class="btn btn-primary">
+                    Proceed to Checkout
+                   </a>
+			</div>
+
+		</div>
+		<div class="cart-balance">
+
+			<p>
+
+				<span>Balance</span>
+
+				<span>L.E @Model.Item3.Balance</span>
+
+			</p>
+
+			<div class="d-grid gap-2  mx-auto">
+			<a asp-controller="cart" asp-action="DepositCash" class="btn btn-primary">
+                    Deposit Cash
+                   </a>
+			</div>
+
+		</div>
+		</div>
+
+	</div>
+
+</div>
+
+
+</form>
+</body>
