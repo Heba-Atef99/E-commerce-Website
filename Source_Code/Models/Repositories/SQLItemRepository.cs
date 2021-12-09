@@ -51,6 +51,15 @@ namespace E_commerce.Models.Repositories
             return items;
         }
 
+        public IEnumerable<ITEM> GetAvailableItemsByAccId(int id)
+        {
+            List<ITEM> db1Items = _apdb.ITEM.Where(i => i.Owner_Account_Id == id && i.Status == 1).ToList();
+            List<ITEM> db2Items = _sadb.ITEM.Where(i => i.Owner_Account_Id == id && i.Status == 1).ToList();
+
+            IEnumerable<ITEM> items = db1Items.Concat(db2Items);
+            return items;
+        }
+
         public IEnumerable<ITEM> GetItemsByAccId(int id)
         {
             List<ITEM> db1Items = _apdb.ITEM.Where(i => i.Owner_Account_Id == id).ToList();

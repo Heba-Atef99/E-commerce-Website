@@ -22,6 +22,7 @@ namespace E_commerce.Models
         public int Owner_Account_Id { get; set; }
         [ForeignKey("Owner_Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
+        public int Status { get; set; } = 1;
 
     }
 }
