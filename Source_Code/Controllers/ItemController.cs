@@ -57,8 +57,20 @@ namespace E_commerce.Controllers
         }
         public IActionResult Inventory()
         {
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            var type_exist=t.Any();
+            string No_Items="";
+            if (type_exist)
+            {
+                
+            }
+            else
+            {
+                No_Items = "You have no items yet";
+            }
             ViewBag.list = t;
+            ViewBag.No_Items = No_Items;
             return View();
         }
 
@@ -66,14 +78,21 @@ namespace E_commerce.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Inventory(EditItemVM obj)
         {
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
             ViewBag.list = t;
             ITEM entity = new ITEM();
             //entity = obj.ITEM;
 
             entity.Id = obj.Id;
-            entity = _itemRepo.GetItemById(entity.Id);
-            return View();
+            //entity = _itemRepo.GetItemById(entity.Id);
+            
+            
+                HttpContext.Session.SetInt32("Edit_Item_Id", (int)obj.Id);
+            return Redirect("/Item/Edit");
+
+            //return View("/Item/Edit");
+            //return View();
         }
         public IActionResult Add()
         {
@@ -93,7 +112,7 @@ namespace E_commerce.Controllers
             entity.Price = obj.Price;
             entity.Date = DateTime.Now;
             entity.Image = obj.Image;
-            entity.Owner_Account_Id = 1;
+            entity.Owner_Account_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
 
             _itemRepo.AddItem(entity);
             return Redirect("/Item/Inventory");
@@ -107,17 +126,20 @@ namespace E_commerce.Controllers
         }
         public IActionResult Edit()
         {
-            ITEM t = _itemRepo.GetItemById(1);
-            //ViewBag.Item = t;
-            return View(t);
+            int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
+            ITEM t = _itemRepo.GetItemById(Item_Id);
+            ViewBag.Item = t;
+            return View();
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit(EditItemVM obj)
         {
-
-            ITEM entity = _itemRepo.GetItemById(1);
-            entity.Id = 1;
+            int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
+            ITEM entity = _itemRepo.GetItemById(Item_Id);
+            ViewBag.Item= entity;
+            //ITEM entity = _itemRepo.GetItemById(1);
+            entity.Id = Item_Id;
             entity.Name = obj.Name;
             //entity.Type = obj.Type;
             entity.Original_Count = obj.Original_Count;
@@ -126,7 +148,7 @@ namespace E_commerce.Controllers
             entity.Price = obj.Price;
             entity.Date = obj.Date;
             entity.Image = obj.Image;
-            entity.Owner_Account_Id = 1;
+            entity.Owner_Account_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
             Boolean x = _itemRepo.UpdateItem(entity);
             //Boolean y=_itemRepo.UpdateItemType(entity, obj.Type);
 
@@ -136,7 +158,8 @@ namespace E_commerce.Controllers
 
         public IActionResult Delete()
         {
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items=tt;
             return View();
@@ -149,8 +172,8 @@ namespace E_commerce.Controllers
         public IActionResult Delete( DeleteItemVM obj)
         {
             //IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
-
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
+            int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items = tt;
 
@@ -161,6 +184,7 @@ namespace E_commerce.Controllers
             entity = _itemRepo.GetItemById(entity.Id);
             
             _itemRepo.DeleteItem( entity.Type,entity.Id);
+
 
             return Redirect("/Item/Inventory");
 

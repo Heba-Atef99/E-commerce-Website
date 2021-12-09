@@ -1,9 +1,9 @@
-﻿@*@model E_commerce.ViewModels.ItemVM.EditItemVM*@
-@model ITEM
-@*var Item= viewbag.Item;*@
+﻿@model E_commerce.ViewModels.ItemVM.EditItemVM
+@*@model ITEM*@
+
 @{
     ViewData["Title"] = "Edit";
-    //var Item = ViewBag.Item;
+    var Item = ViewBag.Item;
 }
 
 @*<h1>Edit</h1>*@
@@ -21,12 +21,12 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5" asp-for ="Name" value="@Model.Name"/>
+                    <input class="mb-3 mt-2 col-5" asp-for ="Name" value="@Item.Name"/>
                 </div>
                 
                 
                 <div class="row justify-content-center text-center">
-                    <b class="mb-3 mt-2"> Category:    @Model.Type </b>
+                    <b class="mb-3 mt-2"> Category:    @Item.Type </b>
                     @*<b class="mb-3 mt-2 col-2" asp-for ="Type" value="@Model.Type"> @Model.Type </b>*@
                 </div>
 
@@ -39,21 +39,21 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5"  asp-for ="Available_Count" value="@Model.Available_Count"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Available_Count" value="@Item.Available_Count"/>
                 </div>
                 <div class="row justify-content-center text-center">
                     <b> Original Count:</b> 
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5"  asp-for ="Original_Count" value="@Model.Original_Count"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Original_Count" value="@Item.Original_Count"/>
                 </div>
                 <div class="row justify-content-center text-center">
                     <b> Description:</b> 
                 </div>
 
                 <div class="row justify-content-center">
-                    <textarea class="mb-3 mt-2 col-5"  asp-for ="Description" value="@Model.Description"> </textarea>
+                    <textarea class="mb-3 mt-2 col-5"  asp-for ="Description" value="@Item.Description"> </textarea>
                 </div>
 
                 <div class="row justify-content-center text-center">
@@ -61,21 +61,21 @@
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5"  asp-for ="Price" value="@Model.Price"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Price" value="@Item.Price"/>
                 </div>
                 <div class="row justify-content-center text-center">
                     <b> Date: </b> 
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5"  asp-for ="Date" value="@Model.Date"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Date" value="@Item.Date"/>
                 </div>
                 <div class="row justify-content-center text-center">
                     <b> Image: </b> 
                 </div>
 
                 <div class="row justify-content-center">
-                    <input class="mb-3 mt-2 col-5"  asp-for ="Image" value="@Model.Image"/>
+                    <input class="mb-3 mt-2 col-5"  asp-for ="Image" value="@Item.Image"/>
                 </div>
         
             <div class="form-group text-center">
