@@ -66,7 +66,8 @@ namespace E_commerce.Controllers
                         Type = t2.Type,
                         Image = t1.Image,
                         Publish_Date = t1.Publish_Date,
-                        Sold_Instances = t1.Sold_Instances
+                        Sold_Instances = t1.Sold_Instances,
+                        Total_Money = t1.Price * t1.Sold_Instances
                     });
 
                 ViewBag.ItemType = 0;
@@ -111,7 +112,8 @@ namespace E_commerce.Controllers
                         Type = t2.Type,
                         Image = t1.Image,
                         Purchased_Count = t1.Purchased_Count,
-                        Purchase_Date = t1.Purchase_Date
+                        Purchase_Date = t1.Purchase_Date,
+                        Total_Money = t1.Price * t1.Purchased_Count
                     });
 
                 ViewBag.ItemType = 2;
@@ -127,8 +129,22 @@ namespace E_commerce.Controllers
         public IActionResult Inventory()
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
-            var type_exist=t.Any();
+            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            IEnumerable<displayed_item> itemList;
+            itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
+                    (i1, i2) => new displayed_item
+                    {
+                        Name = i1.Name,
+                        Price = i1.Price,
+                        Type = i2.Type,
+                        Image = i1.Image,
+                        Available_Count = i1.Available_Count,
+                        Original_Count=i1.Original_Count,
+                        Description=i1.Description,
+                        Publish_Date = i1.Date
+                    });
+            var type_exist= myItems.Any();
             string No_Items="";
             if (type_exist)
             {
@@ -138,7 +154,8 @@ namespace E_commerce.Controllers
             {
                 No_Items = "You have no items yet";
             }
-            ViewBag.list = t;
+            ViewBag.list = itemList;
+            ViewBag.items = myItems;
             ViewBag.No_Items = No_Items;
             return View();
         }
@@ -148,8 +165,34 @@ namespace E_commerce.Controllers
         public IActionResult Inventory(EditItemVM obj)
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
-            ViewBag.list = t;
+            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            IEnumerable<displayed_item> itemList;
+            itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
+                    (i1, i2) => new displayed_item
+                    {
+                        Name = i1.Name,
+                        Price = i1.Price,
+                        Type = i2.Type,
+                        Image = i1.Image,
+                        Available_Count = i1.Available_Count,
+                        Original_Count = i1.Original_Count,
+                        Description = i1.Description,
+                        Publish_Date = i1.Date
+                    });
+            var type_exist = myItems.Any();
+            string No_Items = "";
+            if (type_exist)
+            {
+
+            }
+            else
+            {
+                No_Items = "You have no items yet";
+            }
+            ViewBag.list = itemList;
+            ViewBag.items = myItems;
+            ViewBag.No_Items = No_Items;
             ITEM entity = new ITEM();
             //entity = obj.ITEM;
 
@@ -166,6 +209,8 @@ namespace E_commerce.Controllers
         public IActionResult Add()
         {
             ITEM t= new ITEM();
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            ViewBag.types=allTypes;
             return View(t);
         }
         [HttpPost]
@@ -176,6 +221,7 @@ namespace E_commerce.Controllers
 
             entity.Name = obj.Name;
             entity.Type = obj.Type;
+            entity.Available_Count = obj.Available_Count;
             entity.Original_Count = obj.Original_Count;
             entity.Description = obj.Description;
             entity.Price = obj.Price;
@@ -189,10 +235,7 @@ namespace E_commerce.Controllers
         }
 
 
-        public IActionResult Which_Item_Edit()
-        {
-            return View();
-        }
+
         public IActionResult Edit()
         {
             int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
@@ -206,13 +249,18 @@ namespace E_commerce.Controllers
         {
             int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
             ITEM entity = _itemRepo.GetItemById(Item_Id);
-            ViewBag.Item= entity;
+            ViewBag.Item = entity;
             //ITEM entity = _itemRepo.GetItemById(1);
             entity.Id = Item_Id;
             entity.Name = obj.Name;
             //entity.Type = obj.Type;
-            entity.Original_Count = obj.Original_Count;
+            //entity.Original_Count = obj.Original_Count;
+            //int last_av_count = entity.Available_Count;
+            int diff = entity.Original_Count - entity.Available_Count;
+            //Take the new available count
             entity.Available_Count = obj.Available_Count;
+            //Update the original count
+            entity.Original_Count = obj.Available_Count + diff;
             entity.Description = obj.Description;
             entity.Price = obj.Price;
             entity.Date = obj.Date;
@@ -225,10 +273,11 @@ namespace E_commerce.Controllers
             //return View();
         }
 
+
         public IActionResult Delete()
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items=tt;
             return View();
@@ -242,7 +291,7 @@ namespace E_commerce.Controllers
         {
             //IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items = tt;
 
@@ -251,9 +300,9 @@ namespace E_commerce.Controllers
             
             entity.Id=obj.Id;
             entity = _itemRepo.GetItemById(entity.Id);
-            
-            _itemRepo.DeleteItem( entity.Type,entity.Id);
 
+            entity.Status = 0;
+            Boolean x = _itemRepo.UpdateItem(entity);
 
             return Redirect("/Item/Inventory");
 
