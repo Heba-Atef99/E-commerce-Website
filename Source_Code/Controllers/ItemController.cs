@@ -127,8 +127,22 @@ namespace E_commerce.Controllers
         public IActionResult Inventory()
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
-            var type_exist=t.Any();
+            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            IEnumerable<displayed_item> itemList;
+            itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
+                    (i1, i2) => new displayed_item
+                    {
+                        Name = i1.Name,
+                        Price = i1.Price,
+                        Type = i2.Type,
+                        Image = i1.Image,
+                        Available_Count = i1.Available_Count,
+                        Original_Count=i1.Original_Count,
+                        Description=i1.Description,
+                        Publish_Date = i1.Date
+                    });
+            var type_exist= myItems.Any();
             string No_Items="";
             if (type_exist)
             {
@@ -138,7 +152,8 @@ namespace E_commerce.Controllers
             {
                 No_Items = "You have no items yet";
             }
-            ViewBag.list = t;
+            ViewBag.list = itemList;
+            ViewBag.items = myItems;
             ViewBag.No_Items = No_Items;
             return View();
         }
@@ -148,8 +163,34 @@ namespace E_commerce.Controllers
         public IActionResult Inventory(EditItemVM obj)
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
-            ViewBag.list = t;
+            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            IEnumerable<displayed_item> itemList;
+            itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
+                    (i1, i2) => new displayed_item
+                    {
+                        Name = i1.Name,
+                        Price = i1.Price,
+                        Type = i2.Type,
+                        Image = i1.Image,
+                        Available_Count = i1.Available_Count,
+                        Original_Count = i1.Original_Count,
+                        Description = i1.Description,
+                        Publish_Date = i1.Date
+                    });
+            var type_exist = myItems.Any();
+            string No_Items = "";
+            if (type_exist)
+            {
+
+            }
+            else
+            {
+                No_Items = "You have no items yet";
+            }
+            ViewBag.list = itemList;
+            ViewBag.items = myItems;
+            ViewBag.No_Items = No_Items;
             ITEM entity = new ITEM();
             //entity = obj.ITEM;
 
