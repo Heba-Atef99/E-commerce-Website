@@ -1,0 +1,26 @@
+﻿@model IEnumerable<ACCOUNT1>
+
+<div class="col-md-6 mx-auto">
+    <h1>Accounts</h1>
+    <br />
+    <table class="table text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>Email: </th>
+                <th>Pass: </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var ac in Model)
+            {
+                <tr>
+                    <td>@ac.Email</td>
+                    <td>@ac.Pass</td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+</div>

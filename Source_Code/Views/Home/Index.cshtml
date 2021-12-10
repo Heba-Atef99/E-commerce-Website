@@ -1,0 +1,27 @@
+﻿<link href="~/css/site.css" rel="stylesheet" />
+@{
+    ViewData["Title"] = "Home Page";
+}
+<body>
+    <div>
+        <img src="~/images/people-walking-with-shopping-bags_53876-30090.jpg" height="600" style="opacity:0.5" />
+    </div>
+    <div id="shop" class="col-4 offset-3">
+        <div>
+            <h1 id="shopwith" class="text-center" style="margin-bottom:15px;">Shop With Us</h1">
+        </div>
+        <form id="card" class="card card-body">
+            <a class="btn btn-dark w-auto text-center" asp-controller="Home" asp-action="SignUp" role="button">Sign Up</a>
+            <hr />
+            <a class="btn btn-dark" asp-controller="Home" asp-action="Login" role="button">Sign in</a>
+        </form>
+    </div>
+</body>
+<br />
+<br/>
+<div id="about">
+    <h1 >About us</h1>
+  
+    <p style="font-family: Optima, sans-serif"> We are an online marketplace existing since 2012.
+     Either you want to buy or sell your products, your experience with us will be better. Our goal is to your energy. Just click and let us do the rest. </p>
+</div>
