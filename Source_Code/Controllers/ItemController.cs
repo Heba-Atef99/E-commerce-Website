@@ -66,7 +66,8 @@ namespace E_commerce.Controllers
                         Type = t2.Type,
                         Image = t1.Image,
                         Publish_Date = t1.Publish_Date,
-                        Sold_Instances = t1.Sold_Instances
+                        Sold_Instances = t1.Sold_Instances,
+                        Total_Money = t1.Price * t1.Sold_Instances
                     });
 
                 ViewBag.ItemType = 0;
@@ -111,7 +112,8 @@ namespace E_commerce.Controllers
                         Type = t2.Type,
                         Image = t1.Image,
                         Purchased_Count = t1.Purchased_Count,
-                        Purchase_Date = t1.Purchase_Date
+                        Purchase_Date = t1.Purchase_Date,
+                        Total_Money = t1.Price * t1.Purchased_Count
                     });
 
                 ViewBag.ItemType = 2;
