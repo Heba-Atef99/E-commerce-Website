@@ -207,6 +207,8 @@ namespace E_commerce.Controllers
         public IActionResult Add()
         {
             ITEM t= new ITEM();
+            IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
+            ViewBag.types=allTypes;
             return View(t);
         }
         [HttpPost]
@@ -217,6 +219,7 @@ namespace E_commerce.Controllers
 
             entity.Name = obj.Name;
             entity.Type = obj.Type;
+            entity.Available_Count = obj.Available_Count;
             entity.Original_Count = obj.Original_Count;
             entity.Description = obj.Description;
             entity.Price = obj.Price;

@@ -1,6 +1,7 @@
 ﻿@model ITEM
 @{
     ViewData["Title"] = "Add";
+    var types = ViewBag.types;
 }
 
 <form method="post" asp-action="Add">
@@ -14,9 +15,22 @@
         <div class="row justify-content-center text-center">
                 <input asp-for="Name" class="mb-3 mt-2 col-5" />
          </div>
-                <div class="row justify-content-center text-center">
+
+         <div class="row justify-content-center text-center">
+             If it is in Category:
+         </div>
+            @foreach(var type in types)
+                {
+                    <div class="row justify-content-center text-center">
+                      @type.Type enter @type.Id 
+                    </div>
+
+                }
+         <div class="row justify-content-center text-center">
                 <b > Category </b> 
-        </div>
+         </div>
+
+        
         <div class="row justify-content-center text-center">
                 <input asp-for="Type" class ="mb-3 mt-2 col-5" />
                @*<span asp-validation-for="Type" class="text-danger"></span>*@
