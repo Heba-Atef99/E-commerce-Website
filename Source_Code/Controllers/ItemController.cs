@@ -127,7 +127,7 @@ namespace E_commerce.Controllers
         public IActionResult Inventory()
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             var type_exist=t.Any();
             string No_Items="";
             if (type_exist)
@@ -148,7 +148,7 @@ namespace E_commerce.Controllers
         public IActionResult Inventory(EditItemVM obj)
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             ViewBag.list = t;
             ITEM entity = new ITEM();
             //entity = obj.ITEM;
@@ -189,10 +189,7 @@ namespace E_commerce.Controllers
         }
 
 
-        public IActionResult Which_Item_Edit()
-        {
-            return View();
-        }
+
         public IActionResult Edit()
         {
             int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
@@ -206,13 +203,18 @@ namespace E_commerce.Controllers
         {
             int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
             ITEM entity = _itemRepo.GetItemById(Item_Id);
-            ViewBag.Item= entity;
+            ViewBag.Item = entity;
             //ITEM entity = _itemRepo.GetItemById(1);
             entity.Id = Item_Id;
             entity.Name = obj.Name;
             //entity.Type = obj.Type;
-            entity.Original_Count = obj.Original_Count;
+            //entity.Original_Count = obj.Original_Count;
+            //int last_av_count = entity.Available_Count;
+            int diff = entity.Original_Count - entity.Available_Count;
+            //Take the new available count
             entity.Available_Count = obj.Available_Count;
+            //Update the original count
+            entity.Original_Count = obj.Available_Count + diff;
             entity.Description = obj.Description;
             entity.Price = obj.Price;
             entity.Date = obj.Date;
@@ -224,6 +226,7 @@ namespace E_commerce.Controllers
             return Redirect("/Item/Inventory");
             //return View();
         }
+
 
         public IActionResult Delete()
         {
