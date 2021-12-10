@@ -109,11 +109,12 @@ namespace E_commerce.Controllers
 
                 ViewBag.owners = cat;
                 ViewBag.sitems = sel_items;
-                
+
                 if (add != 0)
                 {
                     c.Item_Id = add;
                     c.Account_Id = login_account;
+                    c.Item_count = 1;
                     _cart.AddToCart(c);
                 }
                 if (owner_id != 0)

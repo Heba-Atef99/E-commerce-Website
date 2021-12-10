@@ -49,17 +49,17 @@
                     <div class="card-body">
                         <h4 class="card-title text-danger">@t.item.Name </h4>
                         <div class="card-text">
-                        
+
                             <h6>Price: @t.item.Price</h6>
                             <h6>Discription: @t.item.Description</h6>
-                           
-                        <form method="get">
-                         <button name="owner_id" class="btn btn-outline-secondary" value="@t.item.Owner_Account_Id"  type="submit">By @t.owner</button>
-                        </form>
-                            <br/>
 
-                            <button name="add" class="btn btn-success" asp-action="CatItems" value="@t.item.Id" type="submit">Add to cart</button>
-
+                            <form method="get">
+                                <button name="owner_id" class="btn btn-outline-secondary" value="@t.item.Owner_Account_Id" type="submit">By @t.owner</button>
+                            </form>
+                            <br />
+                            <form method="get">
+                                <button name="add" class="btn btn-success" asp-action="CatItems" value="@t.item.Id" type="submit">Add to cart</button>
+                            </form>
                         </div>
                         <img width="140" height="140" src="~@t.item.Image" alt="img" />
                     </div>
