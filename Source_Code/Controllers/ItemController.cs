@@ -275,7 +275,7 @@ namespace E_commerce.Controllers
         public IActionResult Delete()
         {
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items=tt;
             return View();
@@ -289,7 +289,7 @@ namespace E_commerce.Controllers
         {
             //IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
             int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(Reg_Id);
+            IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
             var tt = t.ToList();
             ViewBag.items = tt;
 
@@ -298,9 +298,9 @@ namespace E_commerce.Controllers
             
             entity.Id=obj.Id;
             entity = _itemRepo.GetItemById(entity.Id);
-            
-            _itemRepo.DeleteItem( entity.Type,entity.Id);
 
+            entity.Status = 0;
+            Boolean x = _itemRepo.UpdateItem(entity);
 
             return Redirect("/Item/Inventory");
 
