@@ -72,7 +72,7 @@ namespace E_commerce.Controllers
             _logger.AddAccount(acc);
             HttpContext.Session.SetInt32("User_Reg_Id",acc.Id);
             
-            return Redirect("/Home/homepage");
+            return Redirect("/Category/Main");
 
         }
         public IActionResult Homepage()
@@ -104,7 +104,7 @@ namespace E_commerce.Controllers
                     if(BCrypt.Net.BCrypt.Verify(objc.Password, acc.Pass))
                     {
                         HttpContext.Session.SetInt32("User_Reg_Id", acc.Id);
-                        return Redirect("/Home/welcome");
+                        return Redirect("/Category/Main");
                     }
                     else 
                     {
