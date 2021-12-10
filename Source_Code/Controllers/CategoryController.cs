@@ -1,6 +1,6 @@
 ﻿using E_commerce.Models;
 using E_commerce.Models.Repositories;
-using E_commerce.View_Models;
+using E_commerce.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
