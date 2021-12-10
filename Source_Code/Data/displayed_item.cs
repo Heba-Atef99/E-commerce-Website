@@ -15,5 +15,6 @@ namespace E_commerce.Data
         public int Purchased_Count { get; set; }
         public DateTime Publish_Date { get; set; }
         public DateTime Purchase_Date { get; set; }
+        public int Total_Money { get; set; }
     }
 }
