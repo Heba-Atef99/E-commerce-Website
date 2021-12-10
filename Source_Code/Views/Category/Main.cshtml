@@ -1,0 +1,25 @@
+﻿@*@model E_commerce.ViewModels.CategoryVM.TypeVM*@
+@{
+    ViewData["Title"] = "Main";
+    var types = ViewBag.types;
+}
+
+@*<h1>Main</h1>*@
+
+<div class="row mt-5">
+
+    @foreach (var type in types)
+    {
+        <div class="card col-md-3 mx-2 mb-3 p-0">
+            <div class="card-body">
+                <h4 class="card-title text-danger">@type.Type </h4>
+                <div class="card-text">
+                    <form method="get">
+                         <button name="Type" class="btn btn-outline-secondary" value="@type.Id"  type="submit"> Show Items</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
