@@ -1,5 +1,10 @@
 ﻿@model IEnumerable<ACCOUNT1>
+@{
+    ViewData["Title"] = "SignUp";
+    var list1 = ViewBag.l1;
+    var list2 = ViewBag.l2;
 
+}
 <div class="col-md-6 mx-auto">
     <h1>Accounts</h1>
     <br />
@@ -12,13 +17,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var ac in Model)
-            {
-                <tr>
-                    <td>@ac.Email</td>
-                    <td>@ac.Pass</td>
+@foreach(var acc in list1)
+{
+            <tr>
+                <td>@acc.Id</td>
+               
 
-                </tr>
+            </tr>
 
             }
         </tbody>
