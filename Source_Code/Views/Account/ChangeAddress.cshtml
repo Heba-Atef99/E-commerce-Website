@@ -1,0 +1,30 @@
+﻿@using E_commerce.Models
+@model USER
+
+@{
+    ViewData["Title"] = "ChangeAddress";
+}
+
+
+
+<form method="post" asp-action="ChangeAddress"> 
+<div class="cart-container">
+    <div>
+     <h1> <b> Change your Address </b></h1>
+    </div>
+    <div class="container border border-primary p-2">
+     <div>
+     <p>  Enter the new address you would like to associate with your account below. 
+      Be sure to click the <b>Save Changes</b> button when you are done.
+      </p>
+    </div>
+    <div>
+        <label asp-for="Address" class="form-label">  <b>New address </b></label>
+       <input asp-for="Address"  class="form-control" />
+    </div>
+    <div>
+        <button type="submit" class="btn btn-primary">Save Changes</button>
+    </div>
+    </div>
+</div>
+</form>
