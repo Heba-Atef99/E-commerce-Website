@@ -1,0 +1,74 @@
+﻿@model IEnumerable<E_commerce.Data.displayed_item>
+@{
+    int i = 0;
+}
+@*<div class="col-md-6 mx-auto">*@
+
+    @if (ViewBag.ItemType == 0)
+    {
+        <h1 class="text-center">Sold Items</h1>
+    }
+    @if (ViewBag.ItemType == 1)
+    {
+        <h1 class="text-center">Unsold Items</h1>
+    }
+    @if (ViewBag.ItemType == 2)
+    {
+        <h1 class="text-center">Purchased Items</h1>
+    }
+    <br />
+    <table class="table table-striped text-center">
+        <thead class="thead-dark">
+            <tr>
+                <th>ID: </th>
+                <th>Image: </th>
+                <th>Name: </th>
+                <th>Type: </th>
+                <th>Price: </th>
+                @if (ViewBag.ItemType == 2)
+                {
+                    <th>Purchased Amount: </th>
+                    <th>Purchased Date: </th>
+                }
+                @if (ViewBag.ItemType == 1)
+                {
+                    <th>Available Amount: </th>
+                    <th>Publish Date: </th>
+                }
+                @if (ViewBag.ItemType == 0)
+                {
+                    <th>Sold Amount: </th>
+                    <th>Publish Date: </th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                i = i + 1;
+                <tr>
+                    <td>@i</td>
+                    <td><img alt="@item.Name" height="50" width="50" src="~/Img/batata.jpg"></td>
+                    <td>@item.Name</td>
+                    <td>@item.Type</td>
+                    <td>@item.Price</td>
+                    @if (ViewBag.ItemType == 2)
+                    {
+                        <td>@item.Purchased_Count</td>
+                        <td>@item.Purchase_Date </td>
+                    }
+                    @if (ViewBag.ItemType == 1)
+                    {
+                        <td>@item.Available_Count</td>
+                        <td>@item.Publish_Date </td>
+                    }
+                    @if (ViewBag.ItemType == 0)
+                    {
+                        <td>@item.Sold_Instances </td>
+                        <td>@item.Publish_Date </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+@*</div>*@
