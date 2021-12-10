@@ -4,7 +4,7 @@ using E_commerce.View_Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Org.BouncyCastle.Crypto.Generators;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,10 +17,12 @@ namespace E_commerce.Controllers
     {
         private readonly IAccountRepository _logger;
         private readonly IUserRepository _user;
-        public HomeController(IAccountRepository logger, IUserRepository user)
+        private readonly IItemRepository _item;
+        public HomeController(IAccountRepository logger, IUserRepository user, IItemRepository item)
         {
             _logger = logger;
             _user = user;
+            _item = item;
         }
 
 
@@ -75,8 +77,9 @@ namespace E_commerce.Controllers
         }
         public IActionResult Homepage()
         {
-            IEnumerable<ACCOUNT1> us = _logger.GetAllAccountEmailsAndPass();
-            return View(us);
+            ViewBag.l1 =  _item.GetAllItems();
+            ViewBag.l2 = _logger.GetAllAccountEmailsAndPass();
+            return View();
         }
         ///login
         [HttpGet]
