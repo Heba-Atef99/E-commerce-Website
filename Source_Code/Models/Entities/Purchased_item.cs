@@ -13,12 +13,12 @@ namespace E_commerce.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? Item_Id { get; set; }
+        public int Item_Id { get; set; }
         [ForeignKey("Item_Id")]
         public virtual ITEM ITEM { get; set; }
 
-        public int? Promoted_Account_Id { get; set; }
-        [ForeignKey("Promoted_Account_Id")]
+        public int Buyer_Account_Id { get; set; }
+        [ForeignKey("Buyer_Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
 
         public int Purchased_Count { get; set; }
