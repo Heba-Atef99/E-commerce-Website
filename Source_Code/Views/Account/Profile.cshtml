@@ -1,0 +1,118 @@
+﻿@using E_commerce.Models
+
+@model Tuple<ACCOUNT,USER>
+
+
+@{
+    ViewData["Title"] = "Profile";
+}
+
+
+
+<body>
+<div class="account-container">
+<div> 
+    <h1 class=" padding: 20px">Account Settings</h1>
+ </div>
+ <div class="account-conatiner"> 
+     <ul class="list-group">
+  <li class="list-group-item">
+      <div class="row"> 
+      <div class="col-6"> <h2>Name</h2>  </div>
+        <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="ChangeName" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> &nbsp; Edit 
+                   </a>
+                  </div>
+        </div>
+        <div>
+             <P> @Model.Item2.Name</P>
+        </div>
+
+        
+        
+  </li>
+  <li class="list-group-item">
+      <div class="row"> 
+      <div class="col-6"> <h2>Email</h2>  </div>
+        <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="ChangeEmail" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> &nbsp; Edit 
+                   </a>
+                  </div>
+                  </div>
+                  <div>
+            <P> @Model.Item1.Email</P>
+        </div>
+       
+
+  </li>
+   <li class="list-group-item">
+      <div class="row"> 
+      <div class="col-6"> <h2>Phone</h2>  </div>
+        <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="ChangePhone" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> &nbsp; Edit 
+                   </a>
+                  </div>
+        </div>
+        <div>
+             <P> @Model.Item2.Phone</P>
+        </div>
+
+        
+        
+  </li>
+   <li class="list-group-item">
+      <div class="row"> 
+      <div class="col-6"> <h2>Address</h2>  </div>
+        <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="ChangeAddress" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> &nbsp; Edit 
+                   </a>
+                  </div>
+        </div>
+        <div>
+             <P> @Model.Item2.Address</P>
+        </div>
+
+        
+        
+  </li>
+       
+ <li class="list-group-item">
+      <div class="row"> 
+      <div class="col-6"> <h2>Balance</h2>  </div>
+        <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="Deposit" class="btn btn-primary">
+                    <i class="bi bi-plus"></i> &nbsp; Deposit cash
+                   </a>
+                  </div>
+        </div>
+        <div>
+             <P> @Model.Item1.Balance</P>
+        </div>
+
+        
+        
+  </li>
+  
+  <li class="list-group-item">
+      <div class="row"> 
+     <div class="col-6"> <h2>Password</h2>  </div>
+       <div class="col-6 text-end"> 
+                   <a asp-controller="Account" asp-action="ChangePassword" class="btn btn-primary">
+                    <i class="bi bi-pencil-square"></i> &nbsp; Edit 
+                   </a>
+                  </div>
+                  </div>
+      </li>
+ 
+ 
+</ul>
+ </div>
+</div>
+
+</body>
+
+

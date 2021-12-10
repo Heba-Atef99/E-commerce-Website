@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using E_commerce.Models.Repositories;
 using E_commerce.Models;
+using E_Commerce.View_Models;
 
 namespace E_commerce.Controllers
 {
@@ -160,7 +161,238 @@ namespace E_commerce.Controllers
             ViewBag.deposit = account.Balance;
             return View();
         }
-       
+        public IActionResult Profile()
+        {
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            USER b = _UserRepository.GetUserById(a.User_Id);
+
+            var mytuple = Tuple.Create(a, b);
+
+            return View(mytuple);
+        }
+        public IActionResult ChangeName()
+        {
+
+            return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeName(USER obj)
+        {
+
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            USER entity = _UserRepository.GetUserById(a.User_Id);
+            entity.Id = a.User_Id;
+            entity.Name = obj.Name;
+            entity.Address = obj.Address;
+            entity.Phone = obj.Phone;
+
+            //entity.USER =_UserRepository.GetUserById(entity.User_Id);
+
+            _UserRepository.UpdateUserName(a.User_Id, entity);
+
+            return RedirectToAction("Profile");
+
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePassword(S obj)
+        {
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+
+            if (BCrypt.Net.BCrypt.Verify(obj.currentPaasword, a.Pass))
+            {
+                if (obj.newPassword == obj.reenterNewPassword)
+                {
+                    a.Pass = BCrypt.Net.BCrypt.HashPassword(obj.newPassword);
+                    ACCOUNT entity = _AccountRepository.GetAccountByAccId(a.Id);
+                    entity.Id = a.Id;
+                    entity.Email = a.Email;
+                    entity.Pass = a.Pass;
+                    entity.Balance = a.Balance;
+                    entity.User_Id = a.User_Id;
+
+                    _AccountRepository.UpdateAccount(entity, 1);
+
+
+                }
+                else
+                {
+                    ViewBag.messageError = "Passwords don't match";
+                    return View();
+                }
+            }
+            else
+            {
+                ViewBag.messageError = "wrong password";
+                return View();
+            }
+
+            return RedirectToAction("Profile");
+
+        }
+        public IActionResult ChangeEmail()
+        {
+            return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeEmail(ACCOUNT obj)
+        {
+
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT entity = _AccountRepository.GetAccountByAccId(account_id);
+            entity.Id = account_id;
+            entity.Email = obj.Email;
+            entity.Pass = obj.Pass;
+            entity.Balance = obj.Balance;
+            entity.User_Id = obj.User_Id;
+            //entity.USER =_UserRepository.GetUserById(entity.User_Id);
+            _AccountRepository.UpdateAccount(entity, 1);
+
+
+            return RedirectToAction("Profile");
+
+        }
+        public IActionResult ChangeAddress()
+        {
+            return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangeAddress(USER obj)
+        {
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            USER entity = _UserRepository.GetUserById(a.User_Id);
+            entity.Id = a.User_Id;
+            entity.Name = obj.Name;
+            entity.Address = obj.Address;
+            entity.Phone = obj.Phone;
+
+            //entity.USER =_UserRepository.GetUserById(entity.User_Id);
+
+            _UserRepository.UpdateUser(entity);
+
+            return RedirectToAction("Profile");
+
+        }
+        public IActionResult ChangePhone()
+        {
+            return View();
+        }
+
+        //POST
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ChangePhone(USER obj)
+        {
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            USER entity = _UserRepository.GetUserById(a.User_Id);
+            entity.Id = a.User_Id;
+            entity.Name = obj.Name;
+            entity.Address = obj.Address;
+            entity.Phone = obj.Phone;
+
+            //entity.USER =_UserRepository.GetUserById(entity.User_Id);
+
+            _UserRepository.UpdateUser(entity);
+
+            return RedirectToAction("Profile");
+
+        }
+        public IActionResult Cart()
+        {
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            List<ITEM> item_list = new List<ITEM>();
+            IEnumerable<CART> b = _CartRepository.GetCartByAccId(account_id);
+            foreach (CART cart in b)
+            {
+                item_list.Add(_itemRepository.GetItemById(cart.Item_Id));
+
+            }
+            List<CART> cart_list = (List<CART>)b;
+
+            var mytuple = Tuple.Create(cart_list, item_list, a);
+
+
+
+
+            return View(mytuple);
+        }
+
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult RemoveCartItem(ITEM obj)
+        {
+
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            _CartRepository.DeleteItemFromCart(account_id, obj.Id);
+
+            return View("Cart");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ProceedToCheckOut(ITEM obj)
+        {
+
+            int account_id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
+            ACCOUNT acc = _AccountRepository.GetAccountByAccId(account_id);
+            IEnumerable<CART> a = _CartRepository.GetCartByAccId(account_id);
+            int counter = 0;
+            List<ITEM> item_list = new List<ITEM>();
+            foreach (CART cart in a)
+            {
+                item_list.Add(_itemRepository.GetItemById(cart.Item_Id));
+            }
+
+            foreach (var obj2 in item_list)
+            {
+                counter = counter + obj2.Price;
+            }
+            if (acc.Balance <= counter)
+            {
+                ACCOUNT entity = _AccountRepository.GetAccountByAccId(account_id);
+                entity.Id = account_id;
+                entity.Email = acc.Email;
+                entity.Pass = acc.Pass;
+                entity.Balance = acc.Balance - counter;
+                entity.User_Id = acc.User_Id;
+                _AccountRepository.UpdateAccount(entity, 2);
+                _CartRepository.DeleteAllCart(account_id);
+                ViewBag.messageError = "Thank you for shopping with us";
+
+
+            }
+            else
+            {
+                ViewBag.messageError = "not enough balance!";
+
+            }
+
+
+            return View("Cart");
+        }
+
 
     }
 }
