@@ -1,4 +1,5 @@
-﻿using E_commerce.Models;
+﻿using E_commerce.Data;
+using E_commerce.Models;
 using E_commerce.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,36 +24,47 @@ namespace E_commerce.Controllers
             _item = item;
         }
         [HttpGet]
-        public ActionResult<IEnumerable<ACCOUNT1>> signin()
+        public ActionResult<IEnumerable<USER>> signin()
         {
-          // var x= _logger.GetAllAccountEmailsAndPass();
-            //IEnumerable<ACCOUNT1> a = _logger.GetAllAccountEmailsAndPass();
-            return _logger.GetAllAccountEmailsAndPass().ToArray();
-        }
-        /*private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
-        private readonly ILogger<WeatherForecastController> _logger;
-
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
-        {
-            _logger = logger;
+             ;
+            return _user.GetAllUsers().ToArray();
         }
 
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet("{id}")]
+
+        public ActionResult<ACCOUNT> Getaccount(int id)
         {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
+            ACCOUNT commandItem = _logger.GetAccountByAccId(id);
+
+            if (commandItem == null)
             {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }*/
+                return NotFound();
+            }
 
+            return commandItem;
+        }
+        //POST:     api/commands
+        [HttpPost]
+        public void signup(Signup ob)
+        {
+            USER u = new USER
+            {
+                Name = ob.Name,
+
+                Phone = ob.Phone,
+                Address = ob.Address,
+            };
+        
+        ACCOUNT acc = new ACCOUNT
+        {
+            Email = ob.Email,
+            Pass = ob.Pass,
+        };
+        _user.AddUser(u);
+            acc.User_Id = u.Id;
+            _logger.AddAccount(acc);
+
+           // return RedirectToAction("signin");
+        }
     }
 }
