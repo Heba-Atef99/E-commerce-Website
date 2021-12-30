@@ -64,7 +64,7 @@ namespace E_commerce.Controllers
         // get items in a specific category
         //                /controller/type_id
         [HttpGet("{id}")]
-        public ActionResult<IEnumerable<ITEM>> GetCategoryItems(int id, string inst, string name)
+        public ActionResult<IEnumerable<ITEM>> GetCategoryItems(int id)
         {
             var items = _item.GetAllItems().ToArray();
             var type_exist = items.ToList().Any(u => u.Type == id);
