@@ -134,13 +134,12 @@ namespace E_commerce.Controllers
             return NoContent();
         }
 
-
-
-        [HttpGet]
-        public ActionResult<IEnumerable<displayed_inventory_item>> Inventory()
+        /*************************** Inventory **********************************/
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<displayed_inventory_item>> Inventory(int id)
         {
             //int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(1);
+            IEnumerable<ITEM> myItems = _itemRepo.GetAvailableItemsByAccId(id);
             IEnumerable<TYPE> allTypes = _typeRepo.GetAllTypes();
             IEnumerable<displayed_inventory_item> itemList;
             itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
@@ -156,7 +155,7 @@ namespace E_commerce.Controllers
                         Publish_Date = i1.Date
                     });
             var type_exist = myItems.Any();
-            
+
             if (type_exist)
             {
                 return itemList.ToArray();
@@ -166,11 +165,11 @@ namespace E_commerce.Controllers
                 return NoContent();
             }
             //return myItems.ToArray();
-            
+
         }
         /********************************************* ADD ***********************************/
-        [HttpPost]
-        public void Add(AddItemVM obj)
+        [HttpPost("{id}")]
+        public ActionResult Add(ITEM obj, int id)
         {
             ITEM entity = new ITEM
             {
@@ -183,52 +182,36 @@ namespace E_commerce.Controllers
                 Available_Count = obj.Available_Count,
             };
             entity.Date = DateTime.Now;
-            entity.Owner_Account_Id = 1;
+            entity.Owner_Account_Id = id;
             entity.Status = 1;
             _itemRepo.AddItem(entity);
 
             //return RedirectToAction("Inventory");
-            //return CreatedAtAction("Inventory", new ITEM { Id = obj.Id }, entity);
-            //return Redirect("/Item/Inventory");
-            //return View();
+            return CreatedAtAction("Inventory", new ITEM { Id = entity.Id }, entity);
         }
 
-
         /*************************** EDIT ************************************/
-        //[HttpPut ("{id}")]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Edit(int id,ITEM entity)
-        //{
-        //    if (id!=entity.Id)
-        //    {
-        //        return BadRequest();
-        //    }
-        //    //int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
+        [HttpPost("{acc_id}")]
 
-        //    //ITEM entity = _itemRepo.GetItemById(id);
+        public ActionResult<int> Edit(int acc_id, ITEM obj)
+        {
+            int itemId = obj.Id;
+            ITEM entity = _itemRepo.GetItemById(itemId);
 
-        //    //ITEM entity = _itemRepo.GetItemById(1);
-        //    //entity.Id = Item_Id;
-        //    //entity.Name = obj.Name;
-        //    ////entity.Type = obj.Type;
-        //    ////entity.Original_Count = obj.Original_Count;
-        //    ////int last_av_count = entity.Available_Count;
-        //    //int diff = entity.Original_Count - entity.Available_Count;
-        //    ////Take the new available count
-        //    //entity.Available_Count = obj.Available_Count;
-        //    ////Update the original count
-        //    //entity.Original_Count = obj.Available_Count + diff;
-        //    //entity.Description = obj.Description;
-        //    //entity.Price = obj.Price;
-        //    //entity.Date = obj.Date;
-        //    //entity.Image = obj.Image;
-        //    //entity.Owner_Account_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-        //    Boolean x = _itemRepo.UpdateItem(entity);
-        //    //Boolean y=_itemRepo.UpdateItemType(entity, obj.Type);
-        //    return NoContent();
-        //    //return Redirect("/Item/Inventory");
-        //    //return View();
-        //}
+            entity.Name = obj.Name;
+            entity.Available_Count = obj.Available_Count;
+            entity.Original_Count = obj.Original_Count;
+
+            entity.Available_Count = obj.Available_Count;
+
+            entity.Description = obj.Description;
+            entity.Price = obj.Price;
+            entity.Image = obj.Image;
+            entity.Owner_Account_Id = acc_id;
+            bool x = _itemRepo.UpdateItem(entity);
+            return 1;
+        }
+
 
         /*************************** DELETE *****************************************/
         //[HttpPut("{id}")]
