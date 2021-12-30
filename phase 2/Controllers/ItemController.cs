@@ -31,13 +31,12 @@ namespace E_commerce.Controllers
 
         /********************************************* Read *********************************************/
         [HttpGet("{accId}")]
-        public ActionResult<string> Dashboard(int accId)
+        public ActionResult<int> Dashboard(int accId)
         {
             ACCOUNT acc = _accRepo.GetAccountByAccId(accId);
             if (acc != null)
             {
-                string balance = "Balance: " + acc.Balance + "$";
-                return balance;
+                return acc.Balance;
             }
 
             return NoContent();
