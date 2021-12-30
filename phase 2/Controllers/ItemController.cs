@@ -212,36 +212,27 @@ namespace E_commerce.Controllers
             bool x = _itemRepo.UpdateItem(entity);
             return 1;
         }
-
-
         /*************************** DELETE *****************************************/
-        //[HttpPut("{id}")]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Delete(int id)
-        //{
-        //    //IEnumerable<ITEM> t = _itemRepo.GetItemsByAccId(1);
-        //    //int Reg_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-        //    //IEnumerable<ITEM> t = _itemRepo.GetAvailableItemsByAccId(Reg_Id);
-        //    //var tt = t.ToList();
-        //    //ViewBag.items = tt;
+        [HttpPost("{acc_id}")]
 
+        public ActionResult<int> Delete(int accid, [FromBody] int ob)
+        {
 
-        //    ITEM entity = new ITEM();
-        //    //entity = obj.ITEM;
+            ITEM entity = _itemRepo.GetItemById(ob);
+            //ITEM entity = new ITEM();
 
-        //    entity.Id = id;
-        //    entity = _itemRepo.GetItemById(entity.Id);
-        //    if (entity == null)
-        //    {
-        //        return NotFound();
-        //    }
+            //entity.Id = id;
+            //entity = _itemRepo.GetItemById(entity.Id);
+            //if (entity == null)
+            //{
+            //    return NotFound();
+            //}
 
-        //    entity.Status = 0;
-        //    Boolean x = _itemRepo.UpdateItem(entity);
-        //    return NoContent();
-        //    //return Redirect("/Item/Inventory");
+            entity.Status = 0;
+            bool x = _itemRepo.UpdateItem(entity);
+            return 1;
 
-        //    //return View();
-        //}
+        }
+
     }
 }
