@@ -29,6 +29,13 @@ namespace E_commerce.Controllers
 
             return _user.GetAllUsers().ToArray();
         }
+        [HttpGet]
+        public ActionResult<IEnumerable<ACCOUNT1>> accounts()
+        {
+            //_user.DeleteUser(41);
+
+            return _logger.GetAllAccountEmailsAndPass().ToArray();
+        }
 
         [HttpGet("{id}")]
 
@@ -37,6 +44,30 @@ namespace E_commerce.Controllers
             ACCOUNT account = _logger.GetAccountByAccId(id);
             int x = account.User_Id;
             USER u = _user.GetUserById(x);
+            userfulldata s = new userfulldata
+            {
+                Name = u.Name,
+                Phone = u.Phone,
+                Address = u.Address,
+                Email = account.Email,
+                Balance = account.Balance
+
+
+            };
+
+            return s;
+
+
+        }
+        [HttpGet("{id}")]
+
+        public ActionResult<userfulldata> Getuser(int id)
+        {
+           // ACCOUNT account = _logger.GetAccountByAccId(id);
+            //int x = account.User_Id;
+            USER u = _user.GetUserById(id);
+            int x = u.Id;
+            ACCOUNT account = _logger.GetAccountByUserId(x);
             userfulldata s = new userfulldata
             {
                 Name = u.Name,
@@ -80,10 +111,10 @@ namespace E_commerce.Controllers
             }
 
             _user.AddUser(u);
-            acc.User_Id = u.Id;
+           int y= acc.User_Id = u.Id;
             _logger.AddAccount(acc);
-
-            // return RedirectToAction("signin");
+            
+           // return RedirectToAction("Getuser", new { y });
         }
         //POST:     api/commands
         [HttpPost]
