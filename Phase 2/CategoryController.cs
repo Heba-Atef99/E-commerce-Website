@@ -24,7 +24,7 @@ namespace E_commerce.Controllers
             owner = name;
         }
     }
-    [Route("api/[controller]/[Action]")]
+    [Route("[controller]/[Action]")]
     [ApiController]
     public class CategoryController : ControllerBase
     {
@@ -53,111 +53,74 @@ namespace E_commerce.Controllers
             return t.ToArray();
         }
 
-            //return View();
-        
+        //get all items
+        //                 /controller
+        [HttpGet]
+        public ActionResult<IEnumerable<ITEM>> GetItems()
+        {
+            return _item.GetAllItems().ToArray();
+        }
 
-        //public IActionResult CatItems(int add,int owner_id,int Sort, Search search_string)
-        //{
-            
-        //    //int login_account=1;
-        //    int login_account = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-        //    //int type_id = 1;
-        //    int type_id = (int)HttpContext.Session.GetInt32("Type_Id");
-        //    IEnumerable<ITEM> items = _item.GetAllItems();
-        //    var type_exist = items.ToList().Any(u => u.Type == type_id);
-        //    CART c = new CART();
-        //    List<ITEM> sel_items = new List<ITEM>();
-        //    sel_items = items.Where(u => u.Type == type_id && u.Status==1).OrderBy(i=>i.Name).ToList();
+        // get items in a specific category
+        //                /controller/type_id
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<ITEM>> GetCategoryItems(int id, string inst, string name)
+        {
+            var items = _item.GetAllItems().ToArray();
+            var type_exist = items.ToList().Any(u => u.Type == id);
+            var sel_items = items.Where(u => u.Type == id && u.Status == 1).OrderBy(i => i.Name).ToArray();
+            if (type_exist)
+            {
+                return sel_items;
+            }
+            else
+            {
+                return NotFound();
+            }
+        }
+        // search category items by name
+        [HttpGet("{id}/{name}")]
+        public ActionResult<IEnumerable<ITEM>> Search(int id, string inst, string name)
+        {
+            var items = _item.GetAllItems().ToArray();
+            var type_exist = items.ToList().Any(u => u.Type == id);
+            var sel_items = items.Where(u => u.Type == id && u.Status == 1).OrderBy(i => i.Name).ToArray();
+            if (type_exist)
+            {
+                var name_exist = items.ToList().Any(u => u.Name == name);
+                if (name_exist)
+                {
+                    sel_items = sel_items.Where(i => i.Name.Contains(name)).ToArray();
+                    return sel_items;
+                }
 
-        //    //List<string> owner_name = new List<string>();
-        //    List<Catitem> cat = new List<Catitem>();
-        //    if (type_exist)
-        //    {
+                else { return NotFound(); }
+            }
+            else { return NotFound(); }
 
-        //        //for (int i = 0; i < 1; i++)
-        //        //{
-        //        //    ITEM item = sel_items[0];
-        //        //    int st = item.Status;
-        //        //    int account_id = item.Owner_Account_Id;
-        //        //    var user_id = _account.GetAccountByAccId(account_id).User_Id;
-        //        //    string name = _user.GetUserById(user_id).Name;
-        //        //    Catitem f = new Catitem(item, name);
-        //        //    cat.Add(f);
-        //        //}
-        //        if (search_string.Name != null)
-        //        {
-        //             sel_items = sel_items.Where(i => i.Name.Contains(search_string.Name)).ToList();
-                    
+        }
+        // sort category items by price
+        [HttpGet("{id}/{order}")]
+        public ActionResult<IEnumerable<ITEM>> SortPrice(int id, string inst, string order)
+        {
+            var items = _item.GetAllItems().ToArray();
+            var type_exist = items.ToList().Any(u => u.Type == id);
+            var sel_items = items.Where(u => u.Type == id && u.Status == 1).OrderBy(i => i.Name).ToArray();
+            if (type_exist)
+            {
+                if (order == "DSC")
+                {
+                    sel_items = sel_items.OrderByDescending(i => i.Price).ToArray();
+                }
+                else if (order == "ASC")
+                {
+                    sel_items = sel_items.OrderBy(i => i.Price).ToArray();
+                }
+                return sel_items;
+            }
+            else { return NotFound(); }
 
-        //        }
-        //        if (search_string.Sort!=null)
-        //        {
-        //            sel_items = sel_items.OrderBy(i => i.Price).ToList();
-        //            if(search_string.Sort =="DSC")
-        //                sel_items = sel_items.OrderByDescending(i => i.Price).ToList();
-
-        //        }
-        //        foreach (var item in sel_items)
-        //        {
-        //            int account_id = item.Owner_Account_Id;
-        //            var user_id = _account.GetAccountByAccId(account_id).User_Id;
-        //            string name = _user.GetUserById(user_id).Name;
-        //            Catitem f = new Catitem(item, name);
-        //            cat.Add(f);
-
-        //        }
-
-        //        ViewBag.owners = cat;
-        //        ViewBag.sitems = sel_items;
-
-        //        if (add != 0)
-        //        {
-        //            c.Item_Id = add;
-        //            c.Account_Id = login_account;
-        //            c.Item_count = 1;
-        //            _cart.AddToCart(c);
-        //        }
-        //        if (owner_id != 0)
-        //        {
-        //            HttpContext.Session.SetInt32("owner_id", owner_id);
-        //            return Redirect("/Account/Owner");
-
-        //        }
-                
-
-                
-        //    }
-        //    else
-        //    {
-        //        ViewBag.fail = "Sorry. There are no items in that category";
-                
-        //    }
-        //    ViewBag.owners = cat;
-        //    ViewBag.sitems = sel_items;
-        //    return View();
-        //}
-        //[HttpGet]
-        //public IActionResult Show()
-        //{
-
-        //    IEnumerable<ITEM> t1 = _item.GetAllItems();
-        //    IEnumerable<USER> t = _user.GetAllUsers();
-        //    ViewBag.data1 = t;
-        //    ViewBag.data2 = t1;
-
-
-        //    //var ac = _account.GetAccountByUserId(19);
-        //    //ViewBag.acc = ac;
-
-        //    return View();
-        //}
-
-
-        //public IActionResult Show()
-        //{
-        //    int type_id = 1;
-        //    return View();
-        //}
+        }
 
     }
 }
