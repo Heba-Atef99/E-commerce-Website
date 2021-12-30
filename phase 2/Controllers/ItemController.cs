@@ -145,6 +145,7 @@ namespace E_commerce.Controllers
             itemList = myItems.Join(allTypes, i1 => i1.Type, i2 => i2.Id,
                     (i1, i2) => new displayed_inventory_item
                     {
+                        id = i1.Id,
                         Name = i1.Name,
                         Price = i1.Price,
                         Type = i2.Type,

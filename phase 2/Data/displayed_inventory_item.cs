@@ -4,6 +4,7 @@ namespace E_commerce.Data
 {
     public class displayed_inventory_item
     {
+        public int id { get; set; }
         public string Name { get; set; }
         public int Price { get; set; }
         public string Type { get; set; }
