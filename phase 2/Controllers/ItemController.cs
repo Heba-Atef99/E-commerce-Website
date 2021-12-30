@@ -170,28 +170,29 @@ namespace E_commerce.Controllers
             
         }
         /********************************************* ADD ***********************************/
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public IActionResult Add(ITEM obj)
-        //{
-        //    ITEM entity = new ITEM();
+        [HttpPost]
+        public void Add(AddItemVM obj)
+        {
+            ITEM entity = new ITEM
+            {
+                Name = obj.Name,
+                Type = obj.Type,
+                Description = obj.Description,
+                Price = obj.Price,
+                Image = obj.Image,
+                Original_Count = obj.Original_Count,
+                Available_Count = obj.Available_Count,
+            };
+            entity.Date = DateTime.Now;
+            entity.Owner_Account_Id = 1;
+            entity.Status = 1;
+            _itemRepo.AddItem(entity);
 
-        //    entity.Name = obj.Name;
-        //    entity.Type = obj.Type;
-        //    entity.Available_Count = obj.Available_Count;
-        //    entity.Original_Count = obj.Original_Count;
-        //    entity.Description = obj.Description;
-        //    entity.Price = obj.Price;
-        //    entity.Date = DateTime.Now;
-        //    entity.Image = obj.Image;
-        //    //entity.Owner_Account_Id = (int)HttpContext.Session.GetInt32("User_Reg_Id");
-        //    entity.Owner_Account_Id = 1;
-        //    _itemRepo.AddItem(entity);
-
-        //    return CreatedAtAction("Inventory", new ITEM { Id = obj.Id }, entity);
-        //    //return Redirect("/Item/Inventory");
-        //    //return View();
-        //}
+            //return RedirectToAction("Inventory");
+            //return CreatedAtAction("Inventory", new ITEM { Id = obj.Id }, entity);
+            //return Redirect("/Item/Inventory");
+            //return View();
+        }
 
 
         /*************************** EDIT ************************************/
@@ -204,9 +205,9 @@ namespace E_commerce.Controllers
         //        return BadRequest();
         //    }
         //    //int Item_Id = (int)HttpContext.Session.GetInt32("Edit_Item_Id");
-            
+
         //    //ITEM entity = _itemRepo.GetItemById(id);
-            
+
         //    //ITEM entity = _itemRepo.GetItemById(1);
         //    //entity.Id = Item_Id;
         //    //entity.Name = obj.Name;
