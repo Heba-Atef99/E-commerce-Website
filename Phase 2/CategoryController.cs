@@ -122,5 +122,19 @@ namespace E_commerce.Controllers
 
         }
 
+        // to add to cart  
+        [HttpPost]
+        public void Add_To_Cart(CART ob)
+        {
+            _cart.AddToCart(ob);
+        }
+        //show cart items for specific account
+        [HttpGet("{id}")]
+        public ActionResult<IEnumerable<CART>> Add_To_Cart(int id)
+        {
+            return _cart.GetCartByAccId(id).ToArray();
+        }
+
+
     }
 }
