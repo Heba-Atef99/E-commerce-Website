@@ -17,6 +17,10 @@ namespace E_commerce.Models
         public int Account_Id { get; set; }
         [ForeignKey("Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
+<<<<<<< HEAD
         public int Item_count { get; set; } = 1;
+=======
+        public int Item_count { get; set; }
+>>>>>>> Registration
     }
 }

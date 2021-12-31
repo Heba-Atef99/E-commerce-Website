@@ -31,9 +31,15 @@ namespace E_commerce.Models.Repositories
                 ACCOUNT2 a2 = new ACCOUNT2 { Id = id, User_Id = a.User_Id, Balance = a.Balance };
                 _sadb.ACCOUNT.Add(a1);
                 _apdb.ACCOUNT.Add(a2);
+<<<<<<< HEAD
 
                 _sadb.SaveChanges();
                 _apdb.SaveChanges();
+=======
+                _apdb.SaveChanges();
+                _sadb.SaveChanges();
+                
+>>>>>>> Registration
                 return id;
             }
             return 0;
