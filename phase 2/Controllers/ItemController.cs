@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using E_commerce.Models.Repositories;
 using E_commerce.Models;
-using E_commerce.ViewModels.ItemVM;
 using E_commerce.Data;
 
 namespace E_commerce.Controllers
