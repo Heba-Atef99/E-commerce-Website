@@ -7,21 +7,16 @@ using System.Threading.Tasks;
 
 namespace E_commerce.Models
 {
-    public class TRANSACTION_HISTORY
+    public class CART
     {
         [Key]
         public int Id { get; set; }
-        public int? Receiver_Id { get; set; }
-        [ForeignKey("Receiver_Id")]
-        
-        public int? Sender_Id { get; set; }
-        [ForeignKey("Sender_Id")]
+        public int Item_Id { get; set; }
+        [ForeignKey ("Item_Id")]
+        public virtual ITEM ITEM { get; set; }
+        public int Account_Id { get; set; }
+        [ForeignKey("Account_Id")]
         public virtual ACCOUNT ACCOUNT { get; set; }
-        
-        public int Money { get; set; }
-
-
-
-
+        public int Item_count { get; set; } = 1;
     }
 }
