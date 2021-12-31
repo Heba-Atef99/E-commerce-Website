@@ -10,5 +10,6 @@ namespace E_commerce.Data
         public int Balance { get; set; } = 0;
         public string Address { get; set; }
         public int Phone { get; set; }
+        public string password { get; set; }
     }
 }

@@ -93,6 +93,7 @@ namespace E_commerce.Controllers
             result.Balance = a.Balance;
             result.Email = a.Email;
             result.Acc_Id = a.Id;
+            result.password = a.Pass;
             return result;
         }
 
@@ -215,7 +216,6 @@ namespace E_commerce.Controllers
         public ActionResult<displayed_cart>/*<Tuple<List<displayed_item_cart>,int,int>>*/ Cart(int account_id)
         {
 
-
             displayed_cart displayed_Cart = new displayed_cart();
             List<displayed_item_cart> list_items = new List<displayed_item_cart>();
 
@@ -229,32 +229,47 @@ namespace E_commerce.Controllers
 
 
 
-            List<int> array = new List<int>();
+            List<int> first_time = new List<int>();
             bool flag = false;
+
             foreach (CART cart in b)
             {
                 ITEM item = _itemRepository.GetItemById(cart.Item_Id);
                 flag = false;
-                for (int i = 0; i < array.Count; i++)
+
+                for (int i = 0; i < first_time.Count; i++)
                 {
-                    if (array[i] == cart.Item_Id)
+                    if (first_time[i] == cart.Item_Id)
                     {
                         flag = true;
                     }
+
                 }
+
                 if (flag == false)
                 {
-                    array.Add(cart.Item_Id);
+                    first_time.Add(cart.Item_Id);
                     displayed_item_cart item_Cart = new displayed_item_cart();
                     item_Cart.description = item.Description;
                     item_Cart.name = item.Name;
                     item_Cart.price = item.Price;
                     item_Cart.image = item.Image;
                     item_Cart.item_count = cart.Item_count;
+                    item_Cart.owner_id = item.Owner_Account_Id;
+                    item_Cart.item_id = item.Id;
+                    foreach (CART cart2 in b)
+                    {
+                        if ((cart.Item_Id == cart2.Item_Id) && (cart.Id != cart2.Id))
+                        {
+                            item_Cart.item_count += cart2.Item_count;
+
+                        }
+                    }
                     list_items.Add(item_Cart);
                     //list_items.Add(item);
                     total_price += (item.Price * item_Cart.item_count);
                 }
+
             }
 
 
@@ -269,14 +284,64 @@ namespace E_commerce.Controllers
 
 
 
-        [HttpPost]
+        //[HttpPost]
 
-        public ActionResult<int> RemoveCartItem(displayed_removeitem s)
+        //public ActionResult<int> RemoveCartItem(displayed_removeitem s)
+        //{
+
+        //    _CartRepository.DeleteItemFromCart(s.account_id, s.item_id);
+
+        //    return 4;
+        //}
+
+        //[HttpPost]
+        //public ActionResult<int> DecreaseItem(displayed_decreaseitem_cart s)
+        //{
+
+        //    _CartRepository.DeleteItemFromCart(s.account_id, s.item_id);
+
+        //    return 4;
+        //}
+
+        //[HttpPost]
+        //public ActionResult<int> IncreaseItem(displayed_increaseitem_cart s)
+        //{
+
+        //    _CartRepository.DeleteItemFromCart(s.account_id, s.item_id);
+
+        //    return 4;
+        //}
+        [HttpGet("{account_id}")]
+        public ActionResult<string> ProceedToCheckout(int account_id)
         {
 
-            _CartRepository.DeleteItemFromCart(s.account_id, s.item_id);
+            ACCOUNT a = _AccountRepository.GetAccountByAccId(account_id);
+            int total_price = 0;
+            IEnumerable<CART> b = _CartRepository.GetCartByAccId(account_id);
+            foreach (CART cart in b)
+            {
+                ITEM item = _itemRepository.GetItemById(cart.Item_Id);
+                total_price += (item.Price * cart.Item_count);
 
-            return 4;
+            }
+            if (total_price <= a.Balance)
+            {
+                a.Balance = a.Balance - total_price;
+                _AccountRepository.UpdateAccount(a, 0);
+                foreach (CART cart in b)
+                {
+                    ITEM item = _itemRepository.GetItemById(cart.Item_Id);
+                    ACCOUNT owner = _AccountRepository.GetAccountByAccId(item.Owner_Account_Id);
+                    owner.Balance += (cart.Item_count * item.Price);
+                    _AccountRepository.UpdateAccount(owner, 0);
+                }
+                _CartRepository.DeleteAllCart(account_id);
+                return "thank you for shopping with us";
+            }
+            else
+            {
+                return "not enough balance";
+            }
         }
 
     }
