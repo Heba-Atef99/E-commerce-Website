@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using E_commerce.Models;
+using E_commerce.Data;
 using E_commerce.Models.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
