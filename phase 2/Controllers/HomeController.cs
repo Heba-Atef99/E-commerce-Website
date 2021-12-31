@@ -22,6 +22,28 @@ namespace E_commerce.Controllers
             _user = user;
             _item = item;
         }
+
+        [HttpGet]
+        public ActionResult<string> Index()
+        {
+            string output = "Shams Store \n We are an online marketplace existing since 2012. \n " +
+                "Either you want to buy or sell your products, your experience with us will be better.Our goal is to save your energy.Just click and let us do the rest.";
+
+            return output;
+        }
+        //[HttpGet]
+        //public ActionResult<Contact> Contact(Contact ob)
+        //{
+        //    return ob;
+        //}
+
+        [HttpPost]
+        public ActionResult<Contact> Contact(Contact b)
+        {
+            return b;
+           // return CreatedAtAction("Contact", new Contact(), b);
+        }
+
         [HttpGet]
         public ActionResult<IEnumerable<USER>> signin()
         {
